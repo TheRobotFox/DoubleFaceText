@@ -55,6 +55,8 @@ struct Volume* volume_create(const char *img_A, const char *img_B, const char *i
 	return vol;
 }
 
+:
+
 void volume_free(struct Volume *v)
 {
 	free(v->data);

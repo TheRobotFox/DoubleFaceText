@@ -15,14 +15,9 @@ int main(int argc, char **argv)
 
 	Mesh mesh = Mesh_create();
 	Mesh_from_volume(mesh,volume);
-	//struct Vertex a = {-1.0f,0,-1.0f},
-	//							b = {1.0f, 0, -1.0f},
-	//							c = {1.0f, 0, 1.0f},
-	//							d = {-1.0f, 0, 1.0f};
-	//Mesh_face_add(mesh,a,b,c,d);
+	Volume_free(volume);
 	Mesh_save_obj(mesh, "out.obj");
 	Mesh_save_stl(mesh, "out.stl");
 	Mesh_free(mesh);
-	Volume_free(volume);
 
 }

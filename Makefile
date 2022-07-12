@@ -1,5 +1,5 @@
-CC=gcc
-CFLAGS:= -lm
+CC=clang
+CFLAGS:= -lm -Ofast -mavx2 -Wall -m64 -s -funsafe-math-optimizations
 source:= $(wildcard *.c) \
 				 $(wildcard List/*.c)
 

@@ -89,13 +89,18 @@ void Mesh_internal_face_Z(Mesh mesh, int x, int y, int z)
 void Mesh_from_volume(Mesh mesh, Volume volume)
 {
 	bool inside;
+
+	puts("Calculating X faces");
+
+	bool *data = volume->data;
 	for(int z=0; z<volume->z; z++)
+	{
 		for(int y=0; y<volume->y; y++)
 		{
 			inside=false;
 			for(int x=0; x<volume->x; x++)
 			{
-				if(inside!=*Volume_get(volume, x,y,z)){
+				if(inside!=*data++){
 					Mesh_internal_face_X(mesh, x,y,z);
 					inside=!inside;
 				}
@@ -104,35 +109,57 @@ void Mesh_from_volume(Mesh mesh, Volume volume)
 				Mesh_internal_face_X(mesh, volume->x,y,z);
 		}
 
+	}
 
+	puts("Calculating Y faces");
+	data = volume->data;
+	int row = volume->x;
+	int layer = row*volume->y;
+	int cube = layer*volume->z;
+
+	for(int x=0; x<volume->x; x++)
+	{
 		for(int z=0; z<volume->z; z++)
-			for(int x=0; x<volume->x; x++)
+		{
+			inside=false;
+			for(int y=0; y<volume->y; y++)
 			{
-				inside=false;
-				for(int y=0; y<volume->y; y++)
-				{
-					if(inside!=*Volume_get(volume, x,y,z)){
-						Mesh_internal_face_Y(mesh, x,y,z);
-						inside=!inside;
-					}
+				if(inside!=*data){
+					Mesh_internal_face_Y(mesh, x,y,z);
+					inside=!inside;
 				}
-				if(inside)
-					Mesh_internal_face_Y(mesh, x, volume->y,z);
+				data+=row;
 			}
-		for(int y=0; y<volume->y; y++)
-			for(int x=0; x<volume->x; x++)
+			if(inside)
+				Mesh_internal_face_Y(mesh, x, volume->y,z);
+		}
+		data-=cube;
+		data++;
+	}
+
+	puts("Calculating Z faces");
+	data = volume->data;
+
+	for(int y=0; y<volume->y; y++)
+	{
+		for(int x=0; x<volume->x; x++)
+		{
+			inside=false;
+			for(int z=0; z<volume->z; z++)
 			{
-				inside=false;
-				for(int z=0; z<volume->z; z++)
-				{
-					if(inside!=*Volume_get(volume, x,y,z)){
-						Mesh_internal_face_Z(mesh, x,y,z);
-						inside=!inside;
-					}
+				if(inside!=*data){
+					Mesh_internal_face_Z(mesh, x,y,z);
+					inside=!inside;
+				}
+				data+=layer;
 			}
+			data-=cube;
+			data++;
 			if(inside)
 				Mesh_internal_face_Z(mesh, x,y,volume->z);
 		}
+	}
+
 }
 
 // Wavefront Obj
@@ -156,7 +183,7 @@ bool Mesh_save_obj(Mesh mesh, const char *path)
 		for(struct Face *f = List_start(mesh->faces),
 				*e = List_end(mesh->faces);
 				f != e; 	f++)
-			fprintf(file, "f %d %d %d %d\n", f->vertex_index[0]+1
+			fprintf(file, "f %ld %ld %ld %ld\n", f->vertex_index[0]+1
 																		 , f->vertex_index[1]+1
 																		 , f->vertex_index[2]+1
 																		 , f->vertex_index[3]+1
@@ -186,17 +213,17 @@ struct Triangle_data
 
 bool Mesh_save_stl(Mesh mesh, const char *path)
 {
-	FILE *file = fopen(path, "w");
+	FILE *file = fopen(path, "wb");
 	if(file){
 
 		// Write empty header
 		uint8_t header[80] = "DoubleFaceText";
-		fwrite(header, 1, sizeof(header), file);
+		fwrite(header, 1, 80, file);
 
 		uint32_t num_of_trig = 2*List_size(mesh->faces);
-		fwrite(&num_of_trig, sizeof(num_of_trig), 1, file);
-		printf("saving: %d", num_of_trig);
+		fwrite(&num_of_trig, 4, 1, file);
 
+		printf("Triangles: %d -> %d", num_of_trig, sizeof(struct Triangle_data));
 		// Tessellate Quad with two Triangles
 		struct Triangle_data trig1 = {0},
 												 trig2 = {0};
@@ -208,12 +235,12 @@ bool Mesh_save_stl(Mesh mesh, const char *path)
 			trig1.vertecies[0]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[0]);
 			trig1.vertecies[1]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[1]);
 			trig1.vertecies[2]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[2]);
-			fwrite(&trig1,sizeof(struct Triangle_data), 1, file);
+			fwrite(&trig1,50, 1, file);
 
 			trig2.vertecies[0]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[2]);
 			trig2.vertecies[1]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[3]);
 			trig2.vertecies[2]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[0]);
-			fwrite(&trig2,sizeof(struct Triangle_data), 1, file);
+			fwrite(&trig2,50, 1, file);
 		}
 		fclose(file);
 		return false;

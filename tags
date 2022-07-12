@@ -1,0 +1,604 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/new/projects/DoubleFaceText/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	/p5.9.20210905.0/
+Buff_find	List/List.c	/^void *Buff_find(char *start, char *end, size_t el_size, bool (*compare)(void*, void*), void *arg/;"	f	typeref:typename:void *
+CC	Makefile	/^CC=gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS:= -lm$/;"	m
+FAST_BITS	stb_image.h	/^#define FAST_BITS /;"	d
+Face	mesh.c	/^struct Face$/;"	s	file:
+List	List/List.h	/^typedef struct _List* List;$/;"	t	typeref:struct:_List *
+List_append	List/List.c	/^bool List_append(List l, const void *element)$/;"	f	typeref:typename:bool
+List_at	List/List.c	/^static inline void* List_at(List l, size_t index)$/;"	f	typeref:typename:void *	file:
+List_capacity	List/List.c	/^size_t List_capacity(List l){return l->max;}$/;"	f	typeref:typename:size_t
+List_clear	List/List.c	/^void List_clear(List l)$/;"	f	typeref:typename:void
+List_copy	List/List.c	/^bool List_copy(List a, List b)$/;"	f	typeref:typename:bool
+List_create	List/List.c	/^List List_create(size_t element_size)$/;"	f	typeref:typename:List
+List_end	List/List.c	/^void* List_end(List l){return l->data+(l->size*l->element_size);}$/;"	f	typeref:typename:void *
+List_find	List/List.c	/^void *List_find(List l, bool (*compare)(void*, void*), void *arg)$/;"	f	typeref:typename:void *
+List_free	List/List.c	/^void List_free(List l)$/;"	f	typeref:typename:void
+List_get	List/List.c	/^void* List_get(List l, size_t index)$/;"	f	typeref:typename:void *
+List_pop	List/List.c	/^void* List_pop(List l)$/;"	f	typeref:typename:void *
+List_reserve	List/List.c	/^bool List_reserve(List l, size_t capacity)$/;"	f	typeref:typename:bool
+List_size	List/List.c	/^size_t List_size(List l){return l->size;}$/;"	f	typeref:typename:size_t
+List_start	List/List.c	/^void* List_start(List l){return l->data;}$/;"	f	typeref:typename:void *
+Mesh	mesh.c	/^struct Mesh$/;"	s	file:
+Mesh	mesh.h	/^typedef struct Mesh* Mesh;$/;"	t	typeref:struct:Mesh *
+Mesh__face_add	mesh.c	/^void Mesh__face_add(Mesh mesh,$/;"	f	typeref:typename:void
+Mesh_create	mesh.c	/^Mesh Mesh_create()$/;"	f	typeref:typename:Mesh
+Mesh_free	mesh.c	/^void Mesh_free(Mesh mesh)$/;"	f	typeref:typename:void
+Mesh_from_volume	mesh.c	/^void Mesh_from_volume(Mesh mesh, Volume volume)$/;"	f	typeref:typename:void
+Mesh_save_obj	mesh.c	/^bool Mesh_save_obj(Mesh mesh, const char *path)$/;"	f	typeref:typename:bool
+Mesh_save_stl	mesh.c	/^void Mesh_save_stl(Mesh mesh, const char *path)$/;"	f	typeref:typename:void
+STBIDEF	stb_image.h	/^#define STBIDEF /;"	d
+STBI_ASSERT	stb_image.h	/^#define STBI_ASSERT(/;"	d
+STBI_EXTERN	stb_image.h	/^#define STBI_EXTERN /;"	d
+STBI_FREE	stb_image.h	/^#define STBI_FREE(/;"	d
+STBI_HAS_LROTL	stb_image.h	/^#define STBI_HAS_LROTL$/;"	d
+STBI_INCLUDE_STB_IMAGE_H	stb_image.h	/^#define STBI_INCLUDE_STB_IMAGE_H$/;"	d
+STBI_MALLOC	stb_image.h	/^#define STBI_MALLOC(/;"	d
+STBI_MAX_DIMENSIONS	stb_image.h	/^#define STBI_MAX_DIMENSIONS /;"	d
+STBI_NOTUSED	stb_image.h	/^#define STBI_NOTUSED(/;"	d
+STBI_NO_BMP	stb_image.h	/^   #define STBI_NO_BMP$/;"	d
+STBI_NO_GIF	stb_image.h	/^   #define STBI_NO_GIF$/;"	d
+STBI_NO_HDR	stb_image.h	/^   #define STBI_NO_HDR$/;"	d
+STBI_NO_JPEG	stb_image.h	/^   #define STBI_NO_JPEG$/;"	d
+STBI_NO_PIC	stb_image.h	/^   #define STBI_NO_PIC$/;"	d
+STBI_NO_PNG	stb_image.h	/^   #define STBI_NO_PNG$/;"	d
+STBI_NO_PNM	stb_image.h	/^   #define STBI_NO_PNM$/;"	d
+STBI_NO_PSD	stb_image.h	/^   #define STBI_NO_PSD$/;"	d
+STBI_NO_SIMD	stb_image.h	/^#define STBI_NO_SIMD$/;"	d
+STBI_NO_TGA	stb_image.h	/^   #define STBI_NO_TGA$/;"	d
+STBI_NO_ZLIB	stb_image.h	/^#define STBI_NO_ZLIB$/;"	d
+STBI_ORDER_BGR	stb_image.h	/^   STBI_ORDER_BGR$/;"	e	enum:__anon84e4e8860403
+STBI_ORDER_RGB	stb_image.h	/^   STBI_ORDER_RGB,$/;"	e	enum:__anon84e4e8860403
+STBI_REALLOC	stb_image.h	/^#define STBI_REALLOC(/;"	d
+STBI_REALLOC_SIZED	stb_image.h	/^#define STBI_REALLOC_SIZED(/;"	d
+STBI_SIMD_ALIGN	stb_image.h	/^#define STBI_SIMD_ALIGN(/;"	d
+STBI_SSE2	stb_image.h	/^#define STBI_SSE2$/;"	d
+STBI_THREAD_LOCAL	stb_image.h	/^        #define STBI_THREAD_LOCAL /;"	d
+STBI_THREAD_LOCAL	stb_image.h	/^      #define STBI_THREAD_LOCAL /;"	d
+STBI_VERSION	stb_image.h	/^#define STBI_VERSION /;"	d
+STBI__BYTECAST	stb_image.h	/^#define STBI__BYTECAST(/;"	d
+STBI__CASE	stb_image.h	/^         #define STBI__CASE(/;"	d
+STBI__CASE	stb_image.h	/^      #define STBI__CASE(/;"	d
+STBI__COMBO	stb_image.h	/^      #define STBI__COMBO(/;"	d
+STBI__F_avg	stb_image.h	/^   STBI__F_avg=3,$/;"	e	enum:__anon84e4e8860f03
+STBI__F_avg_first	stb_image.h	/^   STBI__F_avg_first,$/;"	e	enum:__anon84e4e8860f03
+STBI__F_none	stb_image.h	/^   STBI__F_none=0,$/;"	e	enum:__anon84e4e8860f03
+STBI__F_paeth	stb_image.h	/^   STBI__F_paeth=4,$/;"	e	enum:__anon84e4e8860f03
+STBI__F_paeth_first	stb_image.h	/^   STBI__F_paeth_first$/;"	e	enum:__anon84e4e8860f03
+STBI__F_sub	stb_image.h	/^   STBI__F_sub=1,$/;"	e	enum:__anon84e4e8860f03
+STBI__F_up	stb_image.h	/^   STBI__F_up=2,$/;"	e	enum:__anon84e4e8860f03
+STBI__HDR_BUFLEN	stb_image.h	/^#define STBI__HDR_BUFLEN /;"	d
+STBI__IDCT_1D	stb_image.h	/^#define STBI__IDCT_1D(/;"	d
+STBI__MARKER_none	stb_image.h	/^#define STBI__MARKER_none /;"	d
+STBI__PNG_TYPE	stb_image.h	/^#define STBI__PNG_TYPE(/;"	d
+STBI__RESTART	stb_image.h	/^#define STBI__RESTART(/;"	d
+STBI__SCAN_header	stb_image.h	/^   STBI__SCAN_header$/;"	e	enum:__anon84e4e8860603
+STBI__SCAN_load	stb_image.h	/^   STBI__SCAN_load=0,$/;"	e	enum:__anon84e4e8860603
+STBI__SCAN_type	stb_image.h	/^   STBI__SCAN_type,$/;"	e	enum:__anon84e4e8860603
+STBI__X64_TARGET	stb_image.h	/^#define STBI__X64_TARGET$/;"	d
+STBI__X86_TARGET	stb_image.h	/^#define STBI__X86_TARGET$/;"	d
+STBI__ZFAST_BITS	stb_image.h	/^#define STBI__ZFAST_BITS /;"	d
+STBI__ZFAST_MASK	stb_image.h	/^#define STBI__ZFAST_MASK /;"	d
+STBI_default	stb_image.h	/^   STBI_default = 0, \/\/ only used for desired_channels$/;"	e	enum:__anon84e4e8860103
+STBI_grey	stb_image.h	/^   STBI_grey       = 1,$/;"	e	enum:__anon84e4e8860103
+STBI_grey_alpha	stb_image.h	/^   STBI_grey_alpha = 2,$/;"	e	enum:__anon84e4e8860103
+STBI_rgb	stb_image.h	/^   STBI_rgb        = 3,$/;"	e	enum:__anon84e4e8860103
+STBI_rgb_alpha	stb_image.h	/^   STBI_rgb_alpha  = 4$/;"	e	enum:__anon84e4e8860103
+STB_IMAGE_IMPLEMENTATION	volume.c	/^#define STB_IMAGE_IMPLEMENTATION$/;"	d	file:
+SessionLoad	Session.vim	/^let SessionLoad = 1$/;"	v
+THRESHOLD	volume.c	/^#define THRESHOLD /;"	d	file:
+Vertex	mesh.c	/^struct Vertex$/;"	s	file:
+Volume	volume.h	/^struct Volume$/;"	s
+Volume	volume.h	/^typedef struct Volume* Volume;$/;"	t	typeref:struct:Volume *
+Volume__fill	volume.c	/^void Volume__fill(struct Volume *v, stbi_uc *A, stbi_uc *B, stbi_uc *C)$/;"	f	typeref:typename:void
+Volume_create	volume.c	/^struct Volume* Volume_create(const char *img_A, const char *img_B, const char *img_C)$/;"	f	typeref:struct:Volume *
+Volume_free	volume.c	/^void Volume_free(struct Volume *v)$/;"	f	typeref:typename:void
+Volume_get	volume.c	/^bool* Volume_get(struct Volume *v, int x, int y, int z) { return v->data+(v->x*v->y)*z + (v->x)*/;"	f	typeref:typename:bool *
+YCbCr_to_RGB_kernel	stb_image.h	/^   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc/;"	m	struct:__anon84e4e8860808	typeref:typename:void (*)(stbi_uc * out,const stbi_uc * y,const stbi_uc * pcb,const stbi_uc * pcr,int count,int step)
+_List	List/List.c	/^struct _List{$/;"	s	file:
+__anon84e4e8860103	stb_image.h	/^{$/;"	g
+__anon84e4e8860208	stb_image.h	/^{$/;"	s
+__anon84e4e8860308	stb_image.h	/^{$/;"	s
+__anon84e4e8860403	stb_image.h	/^{$/;"	g
+__anon84e4e8860508	stb_image.h	/^{$/;"	s
+__anon84e4e8860603	stb_image.h	/^{$/;"	g
+__anon84e4e8860708	stb_image.h	/^{$/;"	s
+__anon84e4e8860808	stb_image.h	/^{$/;"	s
+__anon84e4e8860908	stb_image.h	/^   {$/;"	s	struct:__anon84e4e8860808
+__anon84e4e8860a08	stb_image.h	/^{$/;"	s
+__anon84e4e8860b08	stb_image.h	/^{$/;"	s
+__anon84e4e8860c08	stb_image.h	/^{$/;"	s
+__anon84e4e8860d08	stb_image.h	/^{$/;"	s
+__anon84e4e8860e08	stb_image.h	/^{$/;"	s
+__anon84e4e8860f03	stb_image.h	/^enum {$/;"	g
+__anon84e4e8861008	stb_image.h	/^{$/;"	s
+__anon84e4e8861108	stb_image.h	/^{$/;"	s
+__anon84e4e8861208	stb_image.h	/^{$/;"	s
+__anon84e4e8861308	stb_image.h	/^{$/;"	s
+all_a	stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon84e4e8861008	typeref:typename:unsigned int
+app14_color_transform	stb_image.h	/^   int            app14_color_transform; \/\/ Adobe APP14 tag$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+background	stb_image.h	/^   stbi_uc *background;          \/\/ The current "background" as far as a gif is concerned$/;"	m	struct:__anon84e4e8861308	typeref:typename:stbi_uc *
+bgindex	stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+bits_per_channel	stb_image.h	/^   int bits_per_channel;$/;"	m	struct:__anon84e4e8860508	typeref:typename:int
+bpp	stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon84e4e8861008	typeref:typename:int
+buffer_start	stb_image.h	/^   stbi_uc buffer_start[128];$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi_uc[128]
+buflen	stb_image.h	/^   int buflen;$/;"	m	struct:__anon84e4e8860308	typeref:typename:int
+callback_already_read	stb_image.h	/^   int callback_already_read;$/;"	m	struct:__anon84e4e8860308	typeref:typename:int
+channel	stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon84e4e8861108	typeref:typename:stbi_uc
+channel_order	stb_image.h	/^   int channel_order;$/;"	m	struct:__anon84e4e8860508	typeref:typename:int
+code	stb_image.h	/^   stbi__uint16 code[256];$/;"	m	struct:__anon84e4e8860708	typeref:typename:stbi__uint16[256]
+code_bits	stb_image.h	/^   int            code_bits;   \/\/ number of valid bits$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+code_buffer	stb_image.h	/^   stbi__uint32   code_buffer; \/\/ jpeg entropy-coded buffer$/;"	m	struct:__anon84e4e8860808	typeref:typename:stbi__uint32
+code_buffer	stb_image.h	/^   stbi__uint32 code_buffer;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:stbi__uint32
+codes	stb_image.h	/^   stbi__gif_lzw codes[8192];$/;"	m	struct:__anon84e4e8861308	typeref:typename:stbi__gif_lzw[8192]
+coeff	stb_image.h	/^      short   *coeff;   \/\/ progressive only$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:short *
+coeff_h	stb_image.h	/^      int      coeff_w, coeff_h; \/\/ number of 8x8 coefficient blocks$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+coeff_w	stb_image.h	/^      int      coeff_w, coeff_h; \/\/ number of 8x8 coefficient blocks$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+color_table	stb_image.h	/^   stbi_uc *color_table;$/;"	m	struct:__anon84e4e8861308	typeref:typename:stbi_uc *
+cur_x	stb_image.h	/^   int cur_x, cur_y;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+cur_y	stb_image.h	/^   int cur_x, cur_y;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+data	List/List.c	/^	char *data;$/;"	m	struct:_List	typeref:typename:char *	file:
+data	stb_image.h	/^      stbi_uc *data;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:stbi_uc *
+data	volume.h	/^	bool *data;$/;"	m	struct:Volume	typeref:typename:bool *
+dc_pred	stb_image.h	/^      int dc_pred;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+dct_bfly32o	stb_image.h	/^   #define dct_bfly32o(/;"	d
+dct_bfly32o	stb_image.h	/^#define dct_bfly32o(/;"	d
+dct_const	stb_image.h	/^   #define dct_const(/;"	d
+dct_interleave16	stb_image.h	/^   #define dct_interleave16(/;"	d
+dct_interleave8	stb_image.h	/^   #define dct_interleave8(/;"	d
+dct_long_mac	stb_image.h	/^#define dct_long_mac(/;"	d
+dct_long_mul	stb_image.h	/^#define dct_long_mul(/;"	d
+dct_pass	stb_image.h	/^   #define dct_pass(/;"	d
+dct_pass	stb_image.h	/^#define dct_pass(/;"	d
+dct_rot	stb_image.h	/^   #define dct_rot(/;"	d
+dct_trn16	stb_image.h	/^#define dct_trn16(/;"	d
+dct_trn32	stb_image.h	/^#define dct_trn32(/;"	d
+dct_trn64	stb_image.h	/^#define dct_trn64(/;"	d
+dct_trn8_16	stb_image.h	/^#define dct_trn8_16(/;"	d
+dct_trn8_32	stb_image.h	/^#define dct_trn8_32(/;"	d
+dct_trn8_8	stb_image.h	/^#define dct_trn8_8(/;"	d
+dct_wadd	stb_image.h	/^   #define dct_wadd(/;"	d
+dct_wadd	stb_image.h	/^#define dct_wadd(/;"	d
+dct_widen	stb_image.h	/^   #define dct_widen(/;"	d
+dct_widen	stb_image.h	/^#define dct_widen(/;"	d
+dct_wsub	stb_image.h	/^   #define dct_wsub(/;"	d
+dct_wsub	stb_image.h	/^#define dct_wsub(/;"	d
+delay	stb_image.h	/^   int delay;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+delta	stb_image.h	/^   int    delta[17];   \/\/ old 'firstsymbol' - old 'firstcode'$/;"	m	struct:__anon84e4e8860708	typeref:typename:int[17]
+depth	stb_image.h	/^   int depth;$/;"	m	struct:__anon84e4e8860e08	typeref:typename:int
+dequant	stb_image.h	/^   stbi__uint16 dequant[4][64];$/;"	m	struct:__anon84e4e8860808	typeref:typename:stbi__uint16[4][64]
+dft	Makefile	/^dft: $(obj)$/;"	t
+eflags	stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+element_size	List/List.c	/^	size_t element_size;$/;"	m	struct:_List	typeref:typename:size_t	file:
+eob_run	stb_image.h	/^   int            eob_run;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+eof	stb_image.h	/^   int      (*eof)   (void *user);                       \/\/ returns nonzero if we are at end o/;"	m	struct:__anon84e4e8860208	typeref:typename:int (*)(void * user)
+expanded	stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon84e4e8860e08	typeref:typename:stbi_uc *
+extra_read	stb_image.h	/^   int extra_read;$/;"	m	struct:__anon84e4e8861008	typeref:typename:int
+faces	mesh.c	/^	List faces;$/;"	m	struct:Mesh	typeref:typename:List	file:
+fast	stb_image.h	/^   stbi__uint16 fast[1 << STBI__ZFAST_BITS];$/;"	m	struct:__anon84e4e8860b08	typeref:typename:stbi__uint16[]
+fast	stb_image.h	/^   stbi_uc  fast[1 << FAST_BITS];$/;"	m	struct:__anon84e4e8860708	typeref:typename:stbi_uc[]
+fast_ac	stb_image.h	/^   stbi__int16 fast_ac[4][1 << FAST_BITS];$/;"	m	struct:__anon84e4e8860808	typeref:typename:stbi__int16[4][]
+first	stb_image.h	/^   stbi_uc first;$/;"	m	struct:__anon84e4e8861208	typeref:typename:stbi_uc
+first_row_filter	stb_image.h	/^static stbi_uc first_row_filter[5] =$/;"	v	typeref:typename:stbi_uc[5]
+firstcode	stb_image.h	/^   stbi__uint16 firstcode[16];$/;"	m	struct:__anon84e4e8860b08	typeref:typename:stbi__uint16[16]
+firstsymbol	stb_image.h	/^   stbi__uint16 firstsymbol[16];$/;"	m	struct:__anon84e4e8860b08	typeref:typename:stbi__uint16[16]
+flags	stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+h	stb_image.h	/^      int h,v;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+h	stb_image.h	/^   int w,h;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+h2	stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+ha	stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+hd	stb_image.h	/^      int hd,ha;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+history	stb_image.h	/^   stbi_uc *history;$/;"	m	struct:__anon84e4e8861308	typeref:typename:stbi_uc *
+hs	stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon84e4e8860a08	typeref:typename:int
+hsz	stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon84e4e8861008	typeref:typename:int
+huff_ac	stb_image.h	/^   stbi__huffman huff_ac[4];$/;"	m	struct:__anon84e4e8860808	typeref:typename:stbi__huffman[4]
+huff_dc	stb_image.h	/^   stbi__huffman huff_dc[4];$/;"	m	struct:__anon84e4e8860808	typeref:typename:stbi__huffman[4]
+id	stb_image.h	/^      int id;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+idata	stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon84e4e8860e08	typeref:typename:stbi_uc *
+idct_block_kernel	stb_image.h	/^   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);$/;"	m	struct:__anon84e4e8860808	typeref:typename:void (*)(stbi_uc * out,int out_stride,short data[64])
+img_buffer	stb_image.h	/^   stbi_uc *img_buffer, *img_buffer_end;$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi_uc *
+img_buffer_end	stb_image.h	/^   stbi_uc *img_buffer, *img_buffer_end;$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi_uc *
+img_buffer_original	stb_image.h	/^   stbi_uc *img_buffer_original, *img_buffer_original_end;$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi_uc *
+img_buffer_original_end	stb_image.h	/^   stbi_uc *img_buffer_original, *img_buffer_original_end;$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi_uc *
+img_comp	stb_image.h	/^   } img_comp[4];$/;"	m	struct:__anon84e4e8860808	typeref:struct:__anon84e4e8860808::__anon84e4e8860908[4]
+img_h_max	stb_image.h	/^   int img_h_max, img_v_max;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+img_mcu_h	stb_image.h	/^   int img_mcu_w, img_mcu_h;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+img_mcu_w	stb_image.h	/^   int img_mcu_w, img_mcu_h;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+img_mcu_x	stb_image.h	/^   int img_mcu_x, img_mcu_y;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+img_mcu_y	stb_image.h	/^   int img_mcu_x, img_mcu_y;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+img_n	stb_image.h	/^   int img_n, img_out_n;$/;"	m	struct:__anon84e4e8860308	typeref:typename:int
+img_out_n	stb_image.h	/^   int img_n, img_out_n;$/;"	m	struct:__anon84e4e8860308	typeref:typename:int
+img_v_max	stb_image.h	/^   int img_h_max, img_v_max;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+img_x	stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi__uint32
+img_y	stb_image.h	/^   stbi__uint32 img_x, img_y;$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi__uint32
+io	stb_image.h	/^   stbi_io_callbacks io;$/;"	m	struct:__anon84e4e8860308	typeref:typename:stbi_io_callbacks
+io_user_data	stb_image.h	/^   void *io_user_data;$/;"	m	struct:__anon84e4e8860308	typeref:typename:void *
+jfif	stb_image.h	/^   int            jfif;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+length	stb_image.h	/^   stbi__uint32 length;$/;"	m	struct:__anon84e4e8860d08	typeref:typename:stbi__uint32
+lflags	stb_image.h	/^   int lflags;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+line0	stb_image.h	/^   stbi_uc *line0,*line1;$/;"	m	struct:__anon84e4e8860a08	typeref:typename:stbi_uc *
+line1	stb_image.h	/^   stbi_uc *line0,*line1;$/;"	m	struct:__anon84e4e8860a08	typeref:typename:stbi_uc *
+line_size	stb_image.h	/^   int line_size;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+linebuf	stb_image.h	/^      stbi_uc *linebuf;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:stbi_uc *
+load_jpeg_image	stb_image.h	/^static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp, int req_comp)$/;"	f	typeref:typename:stbi_uc *
+lpal	stb_image.h	/^   stbi_uc lpal[256][4];$/;"	m	struct:__anon84e4e8861308	typeref:typename:stbi_uc[256][4]
+ma	stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon84e4e8861008	typeref:typename:unsigned int
+main	dft.c	/^int main(int argc, char **argv)$/;"	f	typeref:typename:int
+marker	stb_image.h	/^   unsigned char  marker;      \/\/ marker seen while filling entropy buffer$/;"	m	struct:__anon84e4e8860808	typeref:typename:unsigned char
+max	List/List.c	/^	size_t max;$/;"	m	struct:_List	typeref:typename:size_t	file:
+max_x	stb_image.h	/^   int max_x, max_y;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+max_y	stb_image.h	/^   int max_x, max_y;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+maxcode	stb_image.h	/^   int maxcode[17];$/;"	m	struct:__anon84e4e8860b08	typeref:typename:int[17]
+maxcode	stb_image.h	/^   unsigned int maxcode[18];$/;"	m	struct:__anon84e4e8860708	typeref:typename:unsigned int[18]
+mb	stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon84e4e8861008	typeref:typename:unsigned int
+mg	stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon84e4e8861008	typeref:typename:unsigned int
+mr	stb_image.h	/^   unsigned int mr,mg,mb,ma, all_a;$/;"	m	struct:__anon84e4e8861008	typeref:typename:unsigned int
+nomore	stb_image.h	/^   int            nomore;      \/\/ flag if we saw a marker so must stop$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+num_bits	stb_image.h	/^   int num_bits;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:int
+num_channels	stb_image.h	/^   int num_channels;$/;"	m	struct:__anon84e4e8860508	typeref:typename:int
+obj	Makefile	/^obj:= $(source:.c=.o)$/;"	m
+offset	stb_image.h	/^   int bpp, offset, hsz;$/;"	m	struct:__anon84e4e8861008	typeref:typename:int
+order	stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon84e4e8860808	typeref:typename:int[4]
+out	stb_image.h	/^   stbi_uc *idata, *expanded, *out;$/;"	m	struct:__anon84e4e8860e08	typeref:typename:stbi_uc *
+out	stb_image.h	/^   stbi_uc *out;                 \/\/ output buffer (always 4 components)$/;"	m	struct:__anon84e4e8861308	typeref:typename:stbi_uc *
+pal	stb_image.h	/^   stbi_uc  pal[256][4];$/;"	m	struct:__anon84e4e8861308	typeref:typename:stbi_uc[256][4]
+parse	stb_image.h	/^   int parse, step;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+prefix	stb_image.h	/^   stbi__int16 prefix;$/;"	m	struct:__anon84e4e8861208	typeref:typename:stbi__int16
+progressive	stb_image.h	/^   int            progressive;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+ratio	stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+raw_coeff	stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:void *
+raw_data	stb_image.h	/^      void *raw_data, *raw_coeff;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:void *
+read	stb_image.h	/^   int      (*read)  (void *user,char *data,int size);   \/\/ fill 'data' with 'size' bytes.  re/;"	m	struct:__anon84e4e8860208	typeref:typename:int (*)(void * user,char * data,int size)
+read_from_callbacks	stb_image.h	/^   int read_from_callbacks;$/;"	m	struct:__anon84e4e8860308	typeref:typename:int
+resample	stb_image.h	/^   resample_row_func resample;$/;"	m	struct:__anon84e4e8860a08	typeref:typename:resample_row_func
+resample_row_1	stb_image.h	/^static stbi_uc *resample_row_1(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)$/;"	f	typeref:typename:stbi_uc *
+resample_row_func	stb_image.h	/^typedef stbi_uc *(*resample_row_func)(stbi_uc *out, stbi_uc *in0, stbi_uc *in1,$/;"	t	typeref:typename:stbi_uc * (*)(stbi_uc * out,stbi_uc * in0,stbi_uc * in1,int w,int hs)
+resample_row_hv_2_kernel	stb_image.h	/^   stbi_uc *(*resample_row_hv_2_kernel)(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, /;"	m	struct:__anon84e4e8860808	typeref:typename:stbi_uc * (*)(stbi_uc * out,stbi_uc * in_near,stbi_uc * in_far,int w,int hs)
+restart_interval	stb_image.h	/^   int restart_interval, todo;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+rgb	stb_image.h	/^   int            rgb;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+s	stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon84e4e8860808	typeref:typename:stbi__context *
+s	stb_image.h	/^   stbi__context *s;$/;"	m	struct:__anon84e4e8860e08	typeref:typename:stbi__context *
+s:l	Session.vim	/^let s:l = 10 - ((9 * winheight(0) + 25) \/ 51)$/;"	v
+s:l	Session.vim	/^let s:l = 14 - ((13 * winheight(0) + 25) \/ 51)$/;"	v
+s:l	Session.vim	/^let s:l = 5 - ((4 * winheight(0) + 25) \/ 51)$/;"	v
+s:l	Session.vim	/^let s:l = 6 - ((5 * winheight(0) + 25) \/ 51)$/;"	v
+s:l	Session.vim	/^let s:l = 9 - ((8 * winheight(0) + 25) \/ 51)$/;"	v
+s:save_splitbelow	Session.vim	/^let s:save_splitbelow = &splitbelow$/;"	v
+s:save_splitright	Session.vim	/^let s:save_splitright = &splitright$/;"	v
+s:save_winminheight	Session.vim	/^let s:save_winminheight = &winminheight$/;"	v
+s:save_winminwidth	Session.vim	/^let s:save_winminwidth = &winminwidth$/;"	v
+s:shortmess_save	Session.vim	/^let s:shortmess_save = &shortmess$/;"	v
+s:so_save	Session.vim	/^let s:so_save = &g:so | let s:siso_save = &g:siso | setg so=0 siso=0 | setl so=-1 siso=-1$/;"	v
+s:sx	Session.vim	/^let s:sx = expand("<sfile>:p:r")."x.vim"$/;"	v
+s:wipebuf	Session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v
+scan_n	stb_image.h	/^   int scan_n, order[4];$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+size	List/List.c	/^	size_t size;$/;"	m	struct:_List	typeref:typename:size_t	file:
+size	stb_image.h	/^   stbi_uc  size[257];$/;"	m	struct:__anon84e4e8860708	typeref:typename:stbi_uc[257]
+size	stb_image.h	/^   stbi_uc  size[288];$/;"	m	struct:__anon84e4e8860b08	typeref:typename:stbi_uc[288]
+size	stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon84e4e8861108	typeref:typename:stbi_uc
+skip	stb_image.h	/^   void     (*skip)  (void *user,int n);                 \/\/ skip the next 'n' bytes, or 'unget/;"	m	struct:__anon84e4e8860208	typeref:typename:void (*)(void * user,int n)
+source	Makefile	/^source:= $(wildcard *.c) \\$/;"	m
+spec_end	stb_image.h	/^   int            spec_end;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+spec_start	stb_image.h	/^   int            spec_start;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+start_x	stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+start_y	stb_image.h	/^   int start_x, start_y;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+stbi__DNL	stb_image.h	/^#define stbi__DNL(/;"	d
+stbi__EOI	stb_image.h	/^#define stbi__EOI(/;"	d
+stbi__SOF	stb_image.h	/^#define stbi__SOF(/;"	d
+stbi__SOF_progressive	stb_image.h	/^#define stbi__SOF_progressive(/;"	d
+stbi__SOI	stb_image.h	/^#define stbi__SOI(/;"	d
+stbi__SOS	stb_image.h	/^#define stbi__SOS(/;"	d
+stbi__YCbCr_to_RGB_row	stb_image.h	/^static void stbi__YCbCr_to_RGB_row(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stb/;"	f	typeref:typename:void
+stbi__YCbCr_to_RGB_simd	stb_image.h	/^static void stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc const *y, stbi_uc const *pcb, stbi_uc /;"	f	typeref:typename:void
+stbi__addsizes_valid	stb_image.h	/^static int stbi__addsizes_valid(int a, int b)$/;"	f	typeref:typename:int
+stbi__at_eof	stb_image.h	/^stbi_inline static int stbi__at_eof(stbi__context *s)$/;"	f	typeref:typename:stbi_inline int
+stbi__bit_reverse	stb_image.h	/^stbi_inline static int stbi__bit_reverse(int v, int bits)$/;"	f	typeref:typename:stbi_inline int
+stbi__bitcount	stb_image.h	/^static int stbi__bitcount(unsigned int a)$/;"	f	typeref:typename:int
+stbi__bitreverse16	stb_image.h	/^stbi_inline static int stbi__bitreverse16(int n)$/;"	f	typeref:typename:stbi_inline int
+stbi__blinn_8x8	stb_image.h	/^static stbi_uc stbi__blinn_8x8(stbi_uc x, stbi_uc y)$/;"	f	typeref:typename:stbi_uc
+stbi__bmask	stb_image.h	/^static const stbi__uint32 stbi__bmask[17]={0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,1638/;"	v	typeref:typename:const stbi__uint32[17]
+stbi__bmp_data	stb_image.h	/^} stbi__bmp_data;$/;"	t	typeref:struct:__anon84e4e8861008
+stbi__bmp_info	stb_image.h	/^static int stbi__bmp_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__bmp_load	stb_image.h	/^static void *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__res/;"	f	typeref:typename:void *
+stbi__bmp_parse_header	stb_image.h	/^static void *stbi__bmp_parse_header(stbi__context *s, stbi__bmp_data *info)$/;"	f	typeref:typename:void *
+stbi__bmp_test	stb_image.h	/^static int stbi__bmp_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__bmp_test_raw	stb_image.h	/^static int stbi__bmp_test_raw(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__build_fast_ac	stb_image.h	/^static void stbi__build_fast_ac(stbi__int16 *fast_ac, stbi__huffman *h)$/;"	f	typeref:typename:void
+stbi__build_huffman	stb_image.h	/^static int stbi__build_huffman(stbi__huffman *h, int *count)$/;"	f	typeref:typename:int
+stbi__check_png_header	stb_image.h	/^static int stbi__check_png_header(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__clamp	stb_image.h	/^stbi_inline static stbi_uc stbi__clamp(int x)$/;"	f	typeref:typename:stbi_inline stbi_uc
+stbi__cleanup_jpeg	stb_image.h	/^static void stbi__cleanup_jpeg(stbi__jpeg *j)$/;"	f	typeref:typename:void
+stbi__compute_huffman_codes	stb_image.h	/^static int stbi__compute_huffman_codes(stbi__zbuf *a)$/;"	f	typeref:typename:int
+stbi__compute_transparency	stb_image.h	/^static int stbi__compute_transparency(stbi__png *z, stbi_uc tc[3], int out_n)$/;"	f	typeref:typename:int
+stbi__compute_transparency16	stb_image.h	/^static int stbi__compute_transparency16(stbi__png *z, stbi__uint16 tc[3], int out_n)$/;"	f	typeref:typename:int
+stbi__compute_y	stb_image.h	/^static stbi_uc stbi__compute_y(int r, int g, int b)$/;"	f	typeref:typename:stbi_uc
+stbi__compute_y_16	stb_image.h	/^static stbi__uint16 stbi__compute_y_16(int r, int g, int b)$/;"	f	typeref:typename:stbi__uint16
+stbi__context	stb_image.h	/^} stbi__context;$/;"	t	typeref:struct:__anon84e4e8860308
+stbi__convert_16_to_8	stb_image.h	/^static stbi_uc *stbi__convert_16_to_8(stbi__uint16 *orig, int w, int h, int channels)$/;"	f	typeref:typename:stbi_uc *
+stbi__convert_8_to_16	stb_image.h	/^static stbi__uint16 *stbi__convert_8_to_16(stbi_uc *orig, int w, int h, int channels)$/;"	f	typeref:typename:stbi__uint16 *
+stbi__convert_format	stb_image.h	/^static unsigned char *stbi__convert_format(unsigned char *data, int img_n, int req_comp, unsigne/;"	f	typeref:typename:unsigned char *
+stbi__convert_format16	stb_image.h	/^static stbi__uint16 *stbi__convert_format16(stbi__uint16 *data, int img_n, int req_comp, unsigne/;"	f	typeref:typename:stbi__uint16 *
+stbi__copyval	stb_image.h	/^static void stbi__copyval(int channel,stbi_uc *dest,const stbi_uc *src)$/;"	f	typeref:typename:void
+stbi__cpuid3	stb_image.h	/^static int stbi__cpuid3(void)$/;"	f	typeref:typename:int
+stbi__create_png_image	stb_image.h	/^static int stbi__create_png_image(stbi__png *a, stbi_uc *image_data, stbi__uint32 image_data_len/;"	f	typeref:typename:int
+stbi__create_png_image_raw	stb_image.h	/^static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 raw_len, int out_/;"	f	typeref:typename:int
+stbi__de_iphone	stb_image.h	/^static void stbi__de_iphone(stbi__png *z)$/;"	f	typeref:typename:void
+stbi__de_iphone_flag	stb_image.h	/^static int stbi__de_iphone_flag = 0;$/;"	v	typeref:typename:int
+stbi__decode_jpeg_header	stb_image.h	/^static int stbi__decode_jpeg_header(stbi__jpeg *z, int scan)$/;"	f	typeref:typename:int
+stbi__decode_jpeg_image	stb_image.h	/^static int stbi__decode_jpeg_image(stbi__jpeg *j)$/;"	f	typeref:typename:int
+stbi__depth_scale_table	stb_image.h	/^static const stbi_uc stbi__depth_scale_table[9] = { 0, 0xff, 0x55, 0, 0x11, 0,0,0, 0x01 };$/;"	v	typeref:typename:const stbi_uc[9]
+stbi__div16	stb_image.h	/^#define stbi__div16(/;"	d
+stbi__div4	stb_image.h	/^#define stbi__div4(/;"	d
+stbi__do_png	stb_image.h	/^static void *stbi__do_png(stbi__png *p, int *x, int *y, int *n, int req_comp, stbi__result_info /;"	f	typeref:typename:void *
+stbi__do_zlib	stb_image.h	/^static int stbi__do_zlib(stbi__zbuf *a, char *obuf, int olen, int exp, int parse_header)$/;"	f	typeref:typename:int
+stbi__err	stb_image.h	/^   #define stbi__err(/;"	d
+stbi__err	stb_image.h	/^static int stbi__err(const char *str)$/;"	f	typeref:typename:int
+stbi__errpf	stb_image.h	/^#define stbi__errpf(/;"	d
+stbi__errpuc	stb_image.h	/^#define stbi__errpuc(/;"	d
+stbi__expand_png_palette	stb_image.h	/^static int stbi__expand_png_palette(stbi__png *a, stbi_uc *palette, int len, int pal_img_n)$/;"	f	typeref:typename:int
+stbi__extend_receive	stb_image.h	/^stbi_inline static int stbi__extend_receive(stbi__jpeg *j, int n)$/;"	f	typeref:typename:stbi_inline int
+stbi__f2f	stb_image.h	/^#define stbi__f2f(/;"	d
+stbi__fill_bits	stb_image.h	/^static void stbi__fill_bits(stbi__zbuf *z)$/;"	f	typeref:typename:void
+stbi__float2fixed	stb_image.h	/^#define stbi__float2fixed(/;"	d
+stbi__float2int	stb_image.h	/^#define stbi__float2int(/;"	d
+stbi__float_postprocess	stb_image.h	/^static void stbi__float_postprocess(float *result, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:void
+stbi__fopen	stb_image.h	/^static FILE *stbi__fopen(char const *filename, char const *mode)$/;"	f	typeref:typename:FILE *
+stbi__free_jpeg_components	stb_image.h	/^static int stbi__free_jpeg_components(stbi__jpeg *z, int ncomp, int why)$/;"	f	typeref:typename:int
+stbi__fsh	stb_image.h	/^#define stbi__fsh(/;"	d
+stbi__g_failure_reason	stb_image.h	/^const char *stbi__g_failure_reason;$/;"	v	typeref:typename:STBI_THREAD_LOCAL const char *
+stbi__get16be	stb_image.h	/^static int stbi__get16be(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__get16le	stb_image.h	/^static int stbi__get16le(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__get32be	stb_image.h	/^static stbi__uint32 stbi__get32be(stbi__context *s)$/;"	f	typeref:typename:stbi__uint32
+stbi__get32le	stb_image.h	/^static stbi__uint32 stbi__get32le(stbi__context *s)$/;"	f	typeref:typename:stbi__uint32
+stbi__get8	stb_image.h	/^stbi_inline static stbi_uc stbi__get8(stbi__context *s)$/;"	f	typeref:typename:stbi_inline stbi_uc
+stbi__get_chunk_header	stb_image.h	/^static stbi__pngchunk stbi__get_chunk_header(stbi__context *s)$/;"	f	typeref:typename:stbi__pngchunk
+stbi__get_marker	stb_image.h	/^static stbi_uc stbi__get_marker(stbi__jpeg *j)$/;"	f	typeref:typename:stbi_uc
+stbi__getn	stb_image.h	/^static int stbi__getn(stbi__context *s, stbi_uc *buffer, int n)$/;"	f	typeref:typename:int
+stbi__gif	stb_image.h	/^} stbi__gif;$/;"	t	typeref:struct:__anon84e4e8861308
+stbi__gif_header	stb_image.h	/^static int stbi__gif_header(stbi__context *s, stbi__gif *g, int *comp, int is_info)$/;"	f	typeref:typename:int
+stbi__gif_info	stb_image.h	/^static int stbi__gif_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__gif_info_raw	stb_image.h	/^static int stbi__gif_info_raw(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__gif_load	stb_image.h	/^static void *stbi__gif_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__res/;"	f	typeref:typename:void *
+stbi__gif_load_next	stb_image.h	/^static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, int req_comp, stb/;"	f	typeref:typename:stbi_uc *
+stbi__gif_lzw	stb_image.h	/^} stbi__gif_lzw;$/;"	t	typeref:struct:__anon84e4e8861208
+stbi__gif_parse_colortable	stb_image.h	/^static void stbi__gif_parse_colortable(stbi__context *s, stbi_uc pal[256][4], int num_entries, i/;"	f	typeref:typename:void
+stbi__gif_test	stb_image.h	/^static int stbi__gif_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__gif_test_raw	stb_image.h	/^static int stbi__gif_test_raw(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__grow_buffer_unsafe	stb_image.h	/^static void stbi__grow_buffer_unsafe(stbi__jpeg *j)$/;"	f	typeref:typename:void
+stbi__h2l_gamma_i	stb_image.h	/^static float stbi__h2l_gamma_i=1.0f\/2.2f, stbi__h2l_scale_i=1.0f;$/;"	v	typeref:typename:float
+stbi__h2l_scale_i	stb_image.h	/^static float stbi__h2l_gamma_i=1.0f\/2.2f, stbi__h2l_scale_i=1.0f;$/;"	v	typeref:typename:float
+stbi__hdr_convert	stb_image.h	/^static void stbi__hdr_convert(float *output, stbi_uc *input, int req_comp)$/;"	f	typeref:typename:void
+stbi__hdr_gettoken	stb_image.h	/^static char *stbi__hdr_gettoken(stbi__context *z, char *buffer)$/;"	f	typeref:typename:char *
+stbi__hdr_info	stb_image.h	/^static int stbi__hdr_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__hdr_load	stb_image.h	/^static float *stbi__hdr_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__re/;"	f	typeref:typename:float *
+stbi__hdr_test	stb_image.h	/^static int stbi__hdr_test(stbi__context* s)$/;"	f	typeref:typename:int
+stbi__hdr_test_core	stb_image.h	/^static int stbi__hdr_test_core(stbi__context *s, const char *signature)$/;"	f	typeref:typename:int
+stbi__hdr_to_ldr	stb_image.h	/^static stbi_uc *stbi__hdr_to_ldr(float   *data, int x, int y, int comp)$/;"	f	typeref:typename:stbi_uc *
+stbi__high_bit	stb_image.h	/^static int stbi__high_bit(unsigned int z)$/;"	f	typeref:typename:int
+stbi__huffman	stb_image.h	/^} stbi__huffman;$/;"	t	typeref:struct:__anon84e4e8860708
+stbi__idct_block	stb_image.h	/^static void stbi__idct_block(stbi_uc *out, int out_stride, short data[64])$/;"	f	typeref:typename:void
+stbi__idct_simd	stb_image.h	/^static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])$/;"	f	typeref:typename:void
+stbi__info_main	stb_image.h	/^static int stbi__info_main(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__int16	stb_image.h	/^typedef   signed short stbi__int16;$/;"	t	typeref:typename:signed short
+stbi__int16	stb_image.h	/^typedef int16_t  stbi__int16;$/;"	t	typeref:typename:int16_t
+stbi__int32	stb_image.h	/^typedef   signed int   stbi__int32;$/;"	t	typeref:typename:signed int
+stbi__int32	stb_image.h	/^typedef int32_t  stbi__int32;$/;"	t	typeref:typename:int32_t
+stbi__is_16_main	stb_image.h	/^static int stbi__is_16_main(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__jbias	stb_image.h	/^static const int stbi__jbias[16] = {0,-1,-3,-7,-15,-31,-63,-127,-255,-511,-1023,-2047,-4095,-819/;"	v	typeref:typename:const int[16]
+stbi__jpeg	stb_image.h	/^} stbi__jpeg;$/;"	t	typeref:struct:__anon84e4e8860808
+stbi__jpeg_decode_block	stb_image.h	/^static int stbi__jpeg_decode_block(stbi__jpeg *j, short data[64], stbi__huffman *hdc, stbi__huff/;"	f	typeref:typename:int
+stbi__jpeg_decode_block_prog_ac	stb_image.h	/^static int stbi__jpeg_decode_block_prog_ac(stbi__jpeg *j, short data[64], stbi__huffman *hac, st/;"	f	typeref:typename:int
+stbi__jpeg_decode_block_prog_dc	stb_image.h	/^static int stbi__jpeg_decode_block_prog_dc(stbi__jpeg *j, short data[64], stbi__huffman *hdc, in/;"	f	typeref:typename:int
+stbi__jpeg_dequantize	stb_image.h	/^static void stbi__jpeg_dequantize(short *data, stbi__uint16 *dequant)$/;"	f	typeref:typename:void
+stbi__jpeg_dezigzag	stb_image.h	/^static const stbi_uc stbi__jpeg_dezigzag[64+15] =$/;"	v	typeref:typename:const stbi_uc[]
+stbi__jpeg_finish	stb_image.h	/^static void stbi__jpeg_finish(stbi__jpeg *z)$/;"	f	typeref:typename:void
+stbi__jpeg_get_bit	stb_image.h	/^stbi_inline static int stbi__jpeg_get_bit(stbi__jpeg *j)$/;"	f	typeref:typename:stbi_inline int
+stbi__jpeg_get_bits	stb_image.h	/^stbi_inline static int stbi__jpeg_get_bits(stbi__jpeg *j, int n)$/;"	f	typeref:typename:stbi_inline int
+stbi__jpeg_huff_decode	stb_image.h	/^stbi_inline static int stbi__jpeg_huff_decode(stbi__jpeg *j, stbi__huffman *h)$/;"	f	typeref:typename:stbi_inline int
+stbi__jpeg_info	stb_image.h	/^static int stbi__jpeg_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__jpeg_info_raw	stb_image.h	/^static int stbi__jpeg_info_raw(stbi__jpeg *j, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__jpeg_load	stb_image.h	/^static void *stbi__jpeg_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__re/;"	f	typeref:typename:void *
+stbi__jpeg_reset	stb_image.h	/^static void stbi__jpeg_reset(stbi__jpeg *j)$/;"	f	typeref:typename:void
+stbi__jpeg_test	stb_image.h	/^static int stbi__jpeg_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__l2h_gamma	stb_image.h	/^static float stbi__l2h_gamma=2.2f, stbi__l2h_scale=1.0f;$/;"	v	typeref:typename:float
+stbi__l2h_scale	stb_image.h	/^static float stbi__l2h_gamma=2.2f, stbi__l2h_scale=1.0f;$/;"	v	typeref:typename:float
+stbi__ldr_to_hdr	stb_image.h	/^static float   *stbi__ldr_to_hdr(stbi_uc *data, int x, int y, int comp)$/;"	f	typeref:typename:float *
+stbi__load_and_postprocess_16bit	stb_image.h	/^static stbi__uint16 *stbi__load_and_postprocess_16bit(stbi__context *s, int *x, int *y, int *com/;"	f	typeref:typename:stbi__uint16 *
+stbi__load_and_postprocess_8bit	stb_image.h	/^static unsigned char *stbi__load_and_postprocess_8bit(stbi__context *s, int *x, int *y, int *com/;"	f	typeref:typename:unsigned char *
+stbi__load_gif_main	stb_image.h	/^static void *stbi__load_gif_main(stbi__context *s, int **delays, int *x, int *y, int *z, int *co/;"	f	typeref:typename:void *
+stbi__load_main	stb_image.h	/^static void *stbi__load_main(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__re/;"	f	typeref:typename:void *
+stbi__loadf_main	stb_image.h	/^static float *stbi__loadf_main(stbi__context *s, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:float *
+stbi__mad2sizes_valid	stb_image.h	/^static int stbi__mad2sizes_valid(int a, int b, int add)$/;"	f	typeref:typename:int
+stbi__mad3sizes_valid	stb_image.h	/^static int stbi__mad3sizes_valid(int a, int b, int c, int add)$/;"	f	typeref:typename:int
+stbi__mad4sizes_valid	stb_image.h	/^static int stbi__mad4sizes_valid(int a, int b, int c, int d, int add)$/;"	f	typeref:typename:int
+stbi__malloc	stb_image.h	/^static void *stbi__malloc(size_t size)$/;"	f	typeref:typename:void *
+stbi__malloc_mad2	stb_image.h	/^static void *stbi__malloc_mad2(int a, int b, int add)$/;"	f	typeref:typename:void *
+stbi__malloc_mad3	stb_image.h	/^static void *stbi__malloc_mad3(int a, int b, int c, int add)$/;"	f	typeref:typename:void *
+stbi__malloc_mad4	stb_image.h	/^static void *stbi__malloc_mad4(int a, int b, int c, int d, int add)$/;"	f	typeref:typename:void *
+stbi__mul2sizes_valid	stb_image.h	/^static int stbi__mul2sizes_valid(int a, int b)$/;"	f	typeref:typename:int
+stbi__out_gif_code	stb_image.h	/^static void stbi__out_gif_code(stbi__gif *g, stbi__uint16 code)$/;"	f	typeref:typename:void
+stbi__paeth	stb_image.h	/^static int stbi__paeth(int a, int b, int c)$/;"	f	typeref:typename:int
+stbi__parse_entropy_coded_data	stb_image.h	/^static int stbi__parse_entropy_coded_data(stbi__jpeg *z)$/;"	f	typeref:typename:int
+stbi__parse_huffman_block	stb_image.h	/^static int stbi__parse_huffman_block(stbi__zbuf *a)$/;"	f	typeref:typename:int
+stbi__parse_png_file	stb_image.h	/^static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)$/;"	f	typeref:typename:int
+stbi__parse_uncompressed_block	stb_image.h	/^static int stbi__parse_uncompressed_block(stbi__zbuf *a)$/;"	f	typeref:typename:int
+stbi__parse_zlib	stb_image.h	/^static int stbi__parse_zlib(stbi__zbuf *a, int parse_header)$/;"	f	typeref:typename:int
+stbi__parse_zlib_header	stb_image.h	/^static int stbi__parse_zlib_header(stbi__zbuf *a)$/;"	f	typeref:typename:int
+stbi__pic_info	stb_image.h	/^static int stbi__pic_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__pic_is4	stb_image.h	/^static int stbi__pic_is4(stbi__context *s,const char *str)$/;"	f	typeref:typename:int
+stbi__pic_load	stb_image.h	/^static void *stbi__pic_load(stbi__context *s,int *px,int *py,int *comp,int req_comp, stbi__resul/;"	f	typeref:typename:void *
+stbi__pic_load_core	stb_image.h	/^static stbi_uc *stbi__pic_load_core(stbi__context *s,int width,int height,int *comp, stbi_uc *re/;"	f	typeref:typename:stbi_uc *
+stbi__pic_packet	stb_image.h	/^} stbi__pic_packet;$/;"	t	typeref:struct:__anon84e4e8861108
+stbi__pic_test	stb_image.h	/^static int stbi__pic_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__pic_test_core	stb_image.h	/^static int stbi__pic_test_core(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__png	stb_image.h	/^} stbi__png;$/;"	t	typeref:struct:__anon84e4e8860e08
+stbi__png_info	stb_image.h	/^static int stbi__png_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__png_info_raw	stb_image.h	/^static int stbi__png_info_raw(stbi__png *p, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__png_is16	stb_image.h	/^static int stbi__png_is16(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__png_load	stb_image.h	/^static void *stbi__png_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__res/;"	f	typeref:typename:void *
+stbi__png_test	stb_image.h	/^static int stbi__png_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__pngchunk	stb_image.h	/^} stbi__pngchunk;$/;"	t	typeref:struct:__anon84e4e8860d08
+stbi__pnm_getinteger	stb_image.h	/^static int      stbi__pnm_getinteger(stbi__context *s, char *c)$/;"	f	typeref:typename:int
+stbi__pnm_info	stb_image.h	/^static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__pnm_isdigit	stb_image.h	/^static int      stbi__pnm_isdigit(char c)$/;"	f	typeref:typename:int
+stbi__pnm_isspace	stb_image.h	/^static int      stbi__pnm_isspace(char c)$/;"	f	typeref:typename:int
+stbi__pnm_load	stb_image.h	/^static void *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__res/;"	f	typeref:typename:void *
+stbi__pnm_skip_whitespace	stb_image.h	/^static void     stbi__pnm_skip_whitespace(stbi__context *s, char *c)$/;"	f	typeref:typename:void
+stbi__pnm_test	stb_image.h	/^static int      stbi__pnm_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__process_frame_header	stb_image.h	/^static int stbi__process_frame_header(stbi__jpeg *z, int scan)$/;"	f	typeref:typename:int
+stbi__process_gif_raster	stb_image.h	/^static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)$/;"	f	typeref:typename:stbi_uc *
+stbi__process_marker	stb_image.h	/^static int stbi__process_marker(stbi__jpeg *z, int m)$/;"	f	typeref:typename:int
+stbi__process_scan_header	stb_image.h	/^static int stbi__process_scan_header(stbi__jpeg *z)$/;"	f	typeref:typename:int
+stbi__psd_decode_rle	stb_image.h	/^static int stbi__psd_decode_rle(stbi__context *s, stbi_uc *p, int pixelCount)$/;"	f	typeref:typename:int
+stbi__psd_info	stb_image.h	/^static int stbi__psd_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__psd_is16	stb_image.h	/^static int stbi__psd_is16(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__psd_load	stb_image.h	/^static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__res/;"	f	typeref:typename:void *
+stbi__psd_test	stb_image.h	/^static int stbi__psd_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__readval	stb_image.h	/^static stbi_uc *stbi__readval(stbi__context *s, int channel, stbi_uc *dest)$/;"	f	typeref:typename:stbi_uc *
+stbi__refill_buffer	stb_image.h	/^static void stbi__refill_buffer(stbi__context *s)$/;"	f	typeref:typename:void
+stbi__resample	stb_image.h	/^} stbi__resample;$/;"	t	typeref:struct:__anon84e4e8860a08
+stbi__resample_row_generic	stb_image.h	/^static stbi_uc *stbi__resample_row_generic(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int /;"	f	typeref:typename:stbi_uc *
+stbi__resample_row_h_2	stb_image.h	/^static stbi_uc*  stbi__resample_row_h_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, /;"	f	typeref:typename:stbi_uc *
+stbi__resample_row_hv_2	stb_image.h	/^static stbi_uc *stbi__resample_row_hv_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, /;"	f	typeref:typename:stbi_uc *
+stbi__resample_row_hv_2_simd	stb_image.h	/^static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, in/;"	f	typeref:typename:stbi_uc *
+stbi__resample_row_v_2	stb_image.h	/^static stbi_uc* stbi__resample_row_v_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, i/;"	f	typeref:typename:stbi_uc *
+stbi__result_info	stb_image.h	/^} stbi__result_info;$/;"	t	typeref:struct:__anon84e4e8860508
+stbi__rewind	stb_image.h	/^static void stbi__rewind(stbi__context *s)$/;"	f	typeref:typename:void
+stbi__setup_jpeg	stb_image.h	/^static void stbi__setup_jpeg(stbi__jpeg *j)$/;"	f	typeref:typename:void
+stbi__shiftsigned	stb_image.h	/^static int stbi__shiftsigned(unsigned int v, int shift, int bits)$/;"	f	typeref:typename:int
+stbi__skip	stb_image.h	/^static void stbi__skip(stbi__context *s, int n)$/;"	f	typeref:typename:void
+stbi__sse2_available	stb_image.h	/^static int stbi__sse2_available(void)$/;"	f	typeref:typename:int
+stbi__start_callbacks	stb_image.h	/^static void stbi__start_callbacks(stbi__context *s, stbi_io_callbacks *c, void *user)$/;"	f	typeref:typename:void
+stbi__start_file	stb_image.h	/^static void stbi__start_file(stbi__context *s, FILE *f)$/;"	f	typeref:typename:void
+stbi__start_mem	stb_image.h	/^static void stbi__start_mem(stbi__context *s, stbi_uc const *buffer, int len)$/;"	f	typeref:typename:void
+stbi__stdio_callbacks	stb_image.h	/^static stbi_io_callbacks stbi__stdio_callbacks =$/;"	v	typeref:typename:stbi_io_callbacks
+stbi__stdio_eof	stb_image.h	/^static int stbi__stdio_eof(void *user)$/;"	f	typeref:typename:int
+stbi__stdio_read	stb_image.h	/^static int stbi__stdio_read(void *user, char *data, int size)$/;"	f	typeref:typename:int
+stbi__stdio_skip	stb_image.h	/^static void stbi__stdio_skip(void *user, int n)$/;"	f	typeref:typename:void
+stbi__tga_get_comp	stb_image.h	/^static int stbi__tga_get_comp(int bits_per_pixel, int is_grey, int* is_rgb16)$/;"	f	typeref:typename:int
+stbi__tga_info	stb_image.h	/^static int stbi__tga_info(stbi__context *s, int *x, int *y, int *comp)$/;"	f	typeref:typename:int
+stbi__tga_load	stb_image.h	/^static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__res/;"	f	typeref:typename:void *
+stbi__tga_read_rgb16	stb_image.h	/^static void stbi__tga_read_rgb16(stbi__context *s, stbi_uc* out)$/;"	f	typeref:typename:void
+stbi__tga_test	stb_image.h	/^static int stbi__tga_test(stbi__context *s)$/;"	f	typeref:typename:int
+stbi__uint16	stb_image.h	/^typedef uint16_t stbi__uint16;$/;"	t	typeref:typename:uint16_t
+stbi__uint16	stb_image.h	/^typedef unsigned short stbi__uint16;$/;"	t	typeref:typename:unsigned short
+stbi__uint32	stb_image.h	/^typedef uint32_t stbi__uint32;$/;"	t	typeref:typename:uint32_t
+stbi__uint32	stb_image.h	/^typedef unsigned int   stbi__uint32;$/;"	t	typeref:typename:unsigned int
+stbi__unpremultiply_on_load	stb_image.h	/^static int stbi__unpremultiply_on_load = 0;$/;"	v	typeref:typename:int
+stbi__vertical_flip	stb_image.h	/^static void stbi__vertical_flip(void *image, int w, int h, int bytes_per_pixel)$/;"	f	typeref:typename:void
+stbi__vertical_flip_slices	stb_image.h	/^static void stbi__vertical_flip_slices(void *image, int w, int h, int z, int bytes_per_pixel)$/;"	f	typeref:typename:void
+stbi__vertically_flip_on_load	stb_image.h	/^#define stbi__vertically_flip_on_load /;"	d
+stbi__vertically_flip_on_load_global	stb_image.h	/^static int stbi__vertically_flip_on_load_global = 0;$/;"	v	typeref:typename:int
+stbi__vertically_flip_on_load_local	stb_image.h	/^static STBI_THREAD_LOCAL int stbi__vertically_flip_on_load_local, stbi__vertically_flip_on_load_/;"	v	typeref:typename:STBI_THREAD_LOCAL int
+stbi__vertically_flip_on_load_set	stb_image.h	/^static STBI_THREAD_LOCAL int stbi__vertically_flip_on_load_local, stbi__vertically_flip_on_load_/;"	v	typeref:typename:STBI_THREAD_LOCAL int
+stbi__zbuf	stb_image.h	/^} stbi__zbuf;$/;"	t	typeref:struct:__anon84e4e8860c08
+stbi__zbuild_huffman	stb_image.h	/^static int stbi__zbuild_huffman(stbi__zhuffman *z, const stbi_uc *sizelist, int num)$/;"	f	typeref:typename:int
+stbi__zdefault_distance	stb_image.h	/^static const stbi_uc stbi__zdefault_distance[32] =$/;"	v	typeref:typename:const stbi_uc[32]
+stbi__zdefault_length	stb_image.h	/^static const stbi_uc stbi__zdefault_length[288] =$/;"	v	typeref:typename:const stbi_uc[288]
+stbi__zdist_base	stb_image.h	/^static const int stbi__zdist_base[32] = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,$/;"	v	typeref:typename:const int[32]
+stbi__zdist_extra	stb_image.h	/^static const int stbi__zdist_extra[32] =$/;"	v	typeref:typename:const int[32]
+stbi__zeof	stb_image.h	/^stbi_inline static int stbi__zeof(stbi__zbuf *z)$/;"	f	typeref:typename:stbi_inline int
+stbi__zexpand	stb_image.h	/^static int stbi__zexpand(stbi__zbuf *z, char *zout, int n)  \/\/ need to make room for n bytes$/;"	f	typeref:typename:int
+stbi__zget8	stb_image.h	/^stbi_inline static stbi_uc stbi__zget8(stbi__zbuf *z)$/;"	f	typeref:typename:stbi_inline stbi_uc
+stbi__zhuffman	stb_image.h	/^} stbi__zhuffman;$/;"	t	typeref:struct:__anon84e4e8860b08
+stbi__zhuffman_decode	stb_image.h	/^stbi_inline static int stbi__zhuffman_decode(stbi__zbuf *a, stbi__zhuffman *z)$/;"	f	typeref:typename:stbi_inline int
+stbi__zhuffman_decode_slowpath	stb_image.h	/^static int stbi__zhuffman_decode_slowpath(stbi__zbuf *a, stbi__zhuffman *z)$/;"	f	typeref:typename:int
+stbi__zlength_base	stb_image.h	/^static const int stbi__zlength_base[31] = {$/;"	v	typeref:typename:const int[31]
+stbi__zlength_extra	stb_image.h	/^static const int stbi__zlength_extra[31]=$/;"	v	typeref:typename:const int[31]
+stbi__zreceive	stb_image.h	/^stbi_inline static unsigned int stbi__zreceive(stbi__zbuf *z, int n)$/;"	f	typeref:typename:stbi_inline unsigned int
+stbi_convert_iphone_png_to_rgb	stb_image.h	/^STBIDEF void stbi_convert_iphone_png_to_rgb(int flag_true_if_should_convert)$/;"	f	typeref:typename:STBIDEF void
+stbi_convert_wchar_to_utf8	stb_image.h	/^STBIDEF int stbi_convert_wchar_to_utf8(char *buffer, size_t bufferlen, const wchar_t* input)$/;"	f	typeref:typename:STBIDEF int
+stbi_failure_reason	stb_image.h	/^STBIDEF const char *stbi_failure_reason(void)$/;"	f	typeref:typename:STBIDEF const char *
+stbi_hdr_to_ldr_gamma	stb_image.h	/^STBIDEF void   stbi_hdr_to_ldr_gamma(float gamma) { stbi__h2l_gamma_i = 1\/gamma; }$/;"	f	typeref:typename:STBIDEF void
+stbi_hdr_to_ldr_scale	stb_image.h	/^STBIDEF void   stbi_hdr_to_ldr_scale(float scale) { stbi__h2l_scale_i = 1\/scale; }$/;"	f	typeref:typename:STBIDEF void
+stbi_image_free	stb_image.h	/^STBIDEF void stbi_image_free(void *retval_from_stbi_load)$/;"	f	typeref:typename:STBIDEF void
+stbi_info	stb_image.h	/^STBIDEF int stbi_info(char const *filename, int *x, int *y, int *comp)$/;"	f	typeref:typename:STBIDEF int
+stbi_info_from_callbacks	stb_image.h	/^STBIDEF int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int *y, int/;"	f	typeref:typename:STBIDEF int
+stbi_info_from_file	stb_image.h	/^STBIDEF int stbi_info_from_file(FILE *f, int *x, int *y, int *comp)$/;"	f	typeref:typename:STBIDEF int
+stbi_info_from_memory	stb_image.h	/^STBIDEF int stbi_info_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp)$/;"	f	typeref:typename:STBIDEF int
+stbi_inline	stb_image.h	/^   #define stbi_inline /;"	d
+stbi_inline	stb_image.h	/^   #define stbi_inline$/;"	d
+stbi_io_callbacks	stb_image.h	/^} stbi_io_callbacks;$/;"	t	typeref:struct:__anon84e4e8860208
+stbi_is_16_bit	stb_image.h	/^STBIDEF int stbi_is_16_bit(char const *filename)$/;"	f	typeref:typename:STBIDEF int
+stbi_is_16_bit_from_callbacks	stb_image.h	/^STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user)$/;"	f	typeref:typename:STBIDEF int
+stbi_is_16_bit_from_file	stb_image.h	/^STBIDEF int stbi_is_16_bit_from_file(FILE *f)$/;"	f	typeref:typename:STBIDEF int
+stbi_is_16_bit_from_memory	stb_image.h	/^STBIDEF int stbi_is_16_bit_from_memory(stbi_uc const *buffer, int len)$/;"	f	typeref:typename:STBIDEF int
+stbi_is_hdr	stb_image.h	/^STBIDEF int      stbi_is_hdr          (char const *filename)$/;"	f	typeref:typename:STBIDEF int
+stbi_is_hdr_from_callbacks	stb_image.h	/^STBIDEF int      stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user)$/;"	f	typeref:typename:STBIDEF int
+stbi_is_hdr_from_file	stb_image.h	/^STBIDEF int stbi_is_hdr_from_file(FILE *f)$/;"	f	typeref:typename:STBIDEF int
+stbi_is_hdr_from_memory	stb_image.h	/^STBIDEF int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)$/;"	f	typeref:typename:STBIDEF int
+stbi_ldr_to_hdr_gamma	stb_image.h	/^STBIDEF void   stbi_ldr_to_hdr_gamma(float gamma) { stbi__l2h_gamma = gamma; }$/;"	f	typeref:typename:STBIDEF void
+stbi_ldr_to_hdr_scale	stb_image.h	/^STBIDEF void   stbi_ldr_to_hdr_scale(float scale) { stbi__l2h_scale = scale; }$/;"	f	typeref:typename:STBIDEF void
+stbi_load	stb_image.h	/^STBIDEF stbi_uc *stbi_load(char const *filename, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:STBIDEF stbi_uc *
+stbi_load_16	stb_image.h	/^STBIDEF stbi_us *stbi_load_16(char const *filename, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:STBIDEF stbi_us *
+stbi_load_16_from_callbacks	stb_image.h	/^STBIDEF stbi_us *stbi_load_16_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, /;"	f	typeref:typename:STBIDEF stbi_us *
+stbi_load_16_from_memory	stb_image.h	/^STBIDEF stbi_us *stbi_load_16_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *c/;"	f	typeref:typename:STBIDEF stbi_us *
+stbi_load_from_callbacks	stb_image.h	/^STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int/;"	f	typeref:typename:STBIDEF stbi_uc *
+stbi_load_from_file	stb_image.h	/^STBIDEF stbi_uc *stbi_load_from_file(FILE *f, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:STBIDEF stbi_uc *
+stbi_load_from_file_16	stb_image.h	/^STBIDEF stbi__uint16 *stbi_load_from_file_16(FILE *f, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:STBIDEF stbi__uint16 *
+stbi_load_from_memory	stb_image.h	/^STBIDEF stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp/;"	f	typeref:typename:STBIDEF stbi_uc *
+stbi_load_gif_from_memory	stb_image.h	/^STBIDEF stbi_uc *stbi_load_gif_from_memory(stbi_uc const *buffer, int len, int **delays, int *x,/;"	f	typeref:typename:STBIDEF stbi_uc *
+stbi_loadf	stb_image.h	/^STBIDEF float *stbi_loadf(char const *filename, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:STBIDEF float *
+stbi_loadf_from_callbacks	stb_image.h	/^STBIDEF float *stbi_loadf_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int /;"	f	typeref:typename:STBIDEF float *
+stbi_loadf_from_file	stb_image.h	/^STBIDEF float *stbi_loadf_from_file(FILE *f, int *x, int *y, int *comp, int req_comp)$/;"	f	typeref:typename:STBIDEF float *
+stbi_loadf_from_memory	stb_image.h	/^STBIDEF float *stbi_loadf_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp,/;"	f	typeref:typename:STBIDEF float *
+stbi_lrot	stb_image.h	/^   #define stbi_lrot(/;"	d
+stbi_set_flip_vertically_on_load	stb_image.h	/^STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip)$/;"	f	typeref:typename:STBIDEF void
+stbi_set_flip_vertically_on_load_thread	stb_image.h	/^STBIDEF void stbi_set_flip_vertically_on_load_thread(int flag_true_if_should_flip)$/;"	f	typeref:typename:STBIDEF void
+stbi_set_unpremultiply_on_load	stb_image.h	/^STBIDEF void stbi_set_unpremultiply_on_load(int flag_true_if_should_unpremultiply)$/;"	f	typeref:typename:STBIDEF void
+stbi_uc	stb_image.h	/^typedef unsigned char stbi_uc;$/;"	t	typeref:typename:unsigned char
+stbi_us	stb_image.h	/^typedef unsigned short stbi_us;$/;"	t	typeref:typename:unsigned short
+stbi_zlib_decode_buffer	stb_image.h	/^STBIDEF int stbi_zlib_decode_buffer(char *obuffer, int olen, char const *ibuffer, int ilen)$/;"	f	typeref:typename:STBIDEF int
+stbi_zlib_decode_malloc	stb_image.h	/^STBIDEF char *stbi_zlib_decode_malloc(char const *buffer, int len, int *outlen)$/;"	f	typeref:typename:STBIDEF char *
+stbi_zlib_decode_malloc_guesssize	stb_image.h	/^STBIDEF char *stbi_zlib_decode_malloc_guesssize(const char *buffer, int len, int initial_size, i/;"	f	typeref:typename:STBIDEF char *
+stbi_zlib_decode_malloc_guesssize_headerflag	stb_image.h	/^STBIDEF char *stbi_zlib_decode_malloc_guesssize_headerflag(const char *buffer, int len, int init/;"	f	typeref:typename:STBIDEF char *
+stbi_zlib_decode_noheader_buffer	stb_image.h	/^STBIDEF int stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffer, int i/;"	f	typeref:typename:STBIDEF int
+stbi_zlib_decode_noheader_malloc	stb_image.h	/^STBIDEF char *stbi_zlib_decode_noheader_malloc(char const *buffer, int len, int *outlen)$/;"	f	typeref:typename:STBIDEF char *
+step	stb_image.h	/^   int parse, step;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+succ_high	stb_image.h	/^   int            succ_high;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+succ_low	stb_image.h	/^   int            succ_low;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+suffix	stb_image.h	/^   stbi_uc suffix;$/;"	m	struct:__anon84e4e8861208	typeref:typename:stbi_uc
+todo	stb_image.h	/^   int restart_interval, todo;$/;"	m	struct:__anon84e4e8860808	typeref:typename:int
+tq	stb_image.h	/^      int tq;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+transparent	stb_image.h	/^   int flags, bgindex, ratio, transparent, eflags;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+type	stb_image.h	/^   stbi__uint32 type;$/;"	m	struct:__anon84e4e8860d08	typeref:typename:stbi__uint32
+type	stb_image.h	/^   stbi_uc size,type,channel;$/;"	m	struct:__anon84e4e8861108	typeref:typename:stbi_uc
+usage	dft.c	/^int usage(const char *name)$/;"	f	typeref:typename:int
+v	stb_image.h	/^      int h,v;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+validate_uint32	stb_image.h	/^typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];$/;"	t	typeref:typename:unsigned char[sizeof (stbi__uint32)==4?1:-1]
+value	stb_image.h	/^   stbi__uint16 value[288];$/;"	m	struct:__anon84e4e8860b08	typeref:typename:stbi__uint16[288]
+values	stb_image.h	/^   stbi_uc  values[256];$/;"	m	struct:__anon84e4e8860708	typeref:typename:stbi_uc[256]
+vertecies	mesh.c	/^	List vertecies;$/;"	m	struct:Mesh	typeref:typename:List	file:
+vertex_index	mesh.c	/^	size_t vertex_index[4];$/;"	m	struct:Face	typeref:typename:size_t[4]	file:
+vs	stb_image.h	/^   int hs,vs;   \/\/ expansion factor in each axis$/;"	m	struct:__anon84e4e8860a08	typeref:typename:int
+w	stb_image.h	/^   int w,h;$/;"	m	struct:__anon84e4e8861308	typeref:typename:int
+w2	stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+w_lores	stb_image.h	/^   int w_lores; \/\/ horizontal pixels pre-expansion$/;"	m	struct:__anon84e4e8860a08	typeref:typename:int
+x	mesh.c	/^	float x,y,z;$/;"	m	struct:Vertex	typeref:typename:float	file:
+x	stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+x	volume.h	/^	int x,y,z;$/;"	m	struct:Volume	typeref:typename:int
+y	mesh.c	/^	float x,y,z;$/;"	m	struct:Vertex	typeref:typename:float	file:
+y	stb_image.h	/^      int x,y,w2,h2;$/;"	m	struct:__anon84e4e8860808::__anon84e4e8860908	typeref:typename:int
+y	volume.h	/^	int x,y,z;$/;"	m	struct:Volume	typeref:typename:int
+ypos	stb_image.h	/^   int ypos;    \/\/ which pre-expansion row we're on$/;"	m	struct:__anon84e4e8860a08	typeref:typename:int
+ystep	stb_image.h	/^   int ystep;   \/\/ how far through vertical expansion we are$/;"	m	struct:__anon84e4e8860a08	typeref:typename:int
+z	mesh.c	/^	float x,y,z;$/;"	m	struct:Vertex	typeref:typename:float	file:
+z	volume.h	/^	int x,y,z;$/;"	m	struct:Volume	typeref:typename:int
+z_distance	stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:stbi__zhuffman
+z_expandable	stb_image.h	/^   int   z_expandable;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:int
+z_length	stb_image.h	/^   stbi__zhuffman z_length, z_distance;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:stbi__zhuffman
+zbuffer	stb_image.h	/^   stbi_uc *zbuffer, *zbuffer_end;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:stbi_uc *
+zbuffer_end	stb_image.h	/^   stbi_uc *zbuffer, *zbuffer_end;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:stbi_uc *
+zout	stb_image.h	/^   char *zout;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:char *
+zout_end	stb_image.h	/^   char *zout_end;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:char *
+zout_start	stb_image.h	/^   char *zout_start;$/;"	m	struct:__anon84e4e8860c08	typeref:typename:char *

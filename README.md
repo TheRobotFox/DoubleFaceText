@@ -2,11 +2,11 @@
 
 Create 3D object from Shadowmaps eg. double sided Text
 
-#Build
+# Build
 ```
 make
 ```
 
-#Example
+# Example
 ```
 ./dft A.bmp B.bmp C.bmp

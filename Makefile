@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS:= -lm -fsanitize=address -g
+CFLAGS:= -lm
 source:= $(wildcard *.c) \
 				 $(wildcard List/*.c)
 

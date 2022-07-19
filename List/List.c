@@ -69,18 +69,18 @@ void *List_find(List l, bool (*compare)(void*, void*), void *arg)
 {
 	return Buff_find(List_start(l),List_end(l),l->element_size,compare,arg);
 }
-bool List_append(List l, const void *element)
+void* List_append(List l, const void *element)
 {
 	if(l->size>=l->max)
 	{
 		if(List_reserve(l, l->max*2))
-			return 1;
+			return 0;
 	}
 	void *ptr=List_at(l,l->size);
 	l->size++;
 	if(element)
 		memcpy(ptr,element,l->element_size);
-	return 0;
+	return ptr;
 }
 
 void* List_pop(List l)

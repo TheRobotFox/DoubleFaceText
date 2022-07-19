@@ -12,7 +12,7 @@ void*	List_end(List l);
 size_t 	List_capacity(List l);
 bool 	List_reserve(List l, size_t capacity);
 void*	List_find(List l, bool (*compare)(void*, void*), void* arg);
-bool	List_append(List l, const void *element);
+void*	List_append(List l, const void *element);
 void* List_pop(List l);
 bool	List_copy(List a, List b);
 void List_clear(List l);

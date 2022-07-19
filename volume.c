@@ -22,9 +22,9 @@ Volume Volume_create()
 void Volume_internal_free(Volume vol)
 {
 
-	for(int x=0; x<width; x++)
+	for(int x=0; x<vol->x; x++)
 	{
-		for(int y=0; y<height; y++)
+		for(int y=0; y<vol->y; y++)
 		{
 			free(vol->data[x][y]);
 		}
@@ -36,7 +36,7 @@ void Volume_internal_free(Volume vol)
 bool Volume_allocate(Volume vol, int width, int height, int length)
 {
 	if(vol->data)
-		Volume_internal_free(Volume vol);
+		Volume_internal_free(vol);
 
 	vol->x = width;
 	vol->y = height;

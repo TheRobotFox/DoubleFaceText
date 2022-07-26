@@ -5,8 +5,8 @@ typedef struct NBT_Payload* NBT_Data;
 
 enum NBT_TYPE
 {
-	NBT_END, 				// 0	0
-	NBT_BYTE, 			// 1	1
+	NBT_END, 		// 0	0
+	NBT_BYTE, 		// 1	1
 	NBT_SHORT,      // 2	2
 	NBT_INT,        // 3	3
 	NBT_LONG,       // 4	4
@@ -20,9 +20,11 @@ enum NBT_TYPE
 	NBT_ARRAY_LONG  // 12	C
 };
 
-NBT NBT_load(const char *path);
+NBT NBT_create();
+bool NBT_from_file(NBT nbt, const char *path);
 
 enum NBT_TYPE NBT_type_get(NBT nbt);
+const char* NBT_type_name(enum NBT_TYPE type);
 
 NBT_Data NBT_data_get(NBT nbt);
 

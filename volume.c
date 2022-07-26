@@ -1,6 +1,6 @@
 #include "volume.h"
+#include "info.h"
 #include "volume_internal.h"
-#include "NBT.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -22,9 +22,9 @@ Volume Volume_create()
 void Volume_internal_free(Volume vol)
 {
 
-	for(int x=0; x<width; x++)
+	for(int x=0; x<vol->x; x++)
 	{
-		for(int y=0; y<height; y++)
+		for(int y=0; y<vol->y; y++)
 		{
 			free(vol->data[x][y]);
 		}
@@ -36,7 +36,7 @@ void Volume_internal_free(Volume vol)
 bool Volume_allocate(Volume vol, int width, int height, int length)
 {
 	if(vol->data)
-		Volume_internal_free(Volume vol);
+		Volume_internal_free(vol);
 
 	vol->x = width;
 	vol->y = height;
@@ -61,7 +61,7 @@ bool Volume_from_shadow_3(Volume vol, Image front, Image side, Image top)
 
 	if( Image_get_x(front)!=Image_get_x(top) ||
 			Image_get_x(side)!=Image_get_y(top) ){
-		puts("[ERROR] Top shadowmap doesn't align with sides");
+		ERROR("Top shadowmap doesn't align with sides")
 		return true;
 	}
 
@@ -81,30 +81,24 @@ bool Volume_from_shadow_3(Volume vol, Image front, Image side, Image top)
 bool Volume_from_shadow_2(Volume vol, Image front, Image side)
 {
 	if(Image_get_y(front)!=Image_get_y(side)){
-		puts("[ERROR] Side shadowmaps missalign in height!");
+		ERROR("Side shadowmaps missalign in height!")
 		return true;
 	}
 
-	int x=Image_get_x(front),
-			y=Image_get_y(front),
-			z=Image_get_x(side);
+	int width=Image_get_x(front),
+			height=Image_get_y(front),
+			length=Image_get_x(side);
 
-	printf("Voxel Volume dimensions: X %d Y %d Z %d\n",x,y,z);
+	INFO("Voxel Volume dimensions: X %d Y %d Z %d\n", width, height, length)
 
-	if(vol->data)
-		free(vol->data);
-	vol->data = malloc(sizeof(struct Volume));
-	vol->x=x;
-	vol->y=y;
-	vol->z=z;
-	vol->data = malloc(x*y*z);
+	Volume_allocate(vol, width, height, length);
 
 	for(int z=0; z<vol->z; z++)
 		for(int y=0; y<vol->y; y++)
 			for(int x=0; x<vol->x; x++)
 				*Volume_get(vol,x,y,z)= (
-										(*Image_get(front, x, y)<THRESHOLD) &&
-										(*Image_get(front, z, y)<THRESHOLD)
+						(*Image_get(front, x, height-y-1)<THRESHOLD) &&
+						(*Image_get(side, z, height-y-1)<THRESHOLD)
 						);
 	return false;
 }
@@ -126,10 +120,9 @@ bool util_contains_string(struct Blocks_transparrent *container, char *str)
 	return 0;
 }
 
-bool Volume_from_nbt(Volume vol, const char *path, struct Blocks_transparrent *blocks_transparrent)
+bool Volume_from_nbt(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_transparrent)
 {
 	bool ret = true;
-	NBT nbt = NBT_load(path);
 
 	NBT_Data size =   NBT_data_get(NBT_compound_get_name(NBT_data_get(nbt), "size"));
 	NBT_Data blocks = NBT_data_get(NBT_compound_get_name(NBT_data_get(nbt), "blocks"));
@@ -138,15 +131,15 @@ bool Volume_from_nbt(Volume vol, const char *path, struct Blocks_transparrent *b
 	if(blocks && size && palette){
 		if(NBT_list_length(size)==3 && NBT_list_type_get(size)==NBT_INT){
 
-			// allocate Voxel Volume
 			vol->x = NBT_integer_get(NBT_list_get(size,0));
-		  vol->y = NBT_integer_get(NBT_list_get(size,1));
+			vol->y = NBT_integer_get(NBT_list_get(size,1));
 			vol->z = NBT_integer_get(NBT_list_get(size,2));
+			INFO("allocate Voxel Volume x: %d y: %d z: %d", vol->x, vol->y, vol->z);
 
-			vol->data=malloc(vol->x*vol->y*vol->z);
-			memset(vol->data,0,vol->x*vol->y*vol->z);
+			Volume_allocate(vol, vol->x, vol->y, vol->z);
 
-			// create transparrent mask
+
+			INFO("Creating transparrency Mask")
 
 			if(!blocks_transparrent)
 				blocks_transparrent = &blocks_transparrent_default;
@@ -164,6 +157,8 @@ bool Volume_from_nbt(Volume vol, const char *path, struct Blocks_transparrent *b
 					goto cleanup;
 			}
 
+			INFO("Writing Voxels")
+
 			size_t block_count = NBT_list_length(blocks),
 						 palette_index;
 			NBT_Data block, pos;
@@ -180,14 +175,12 @@ bool Volume_from_nbt(Volume vol, const char *path, struct Blocks_transparrent *b
 					goto cleanup;
 
 				*Volume_get(vol, NBT_integer_get(NBT_list_get(pos,0)),
-												 NBT_integer_get(NBT_list_get(pos,1)),
-												 NBT_integer_get(NBT_list_get(pos,2)))=mask[palette_index];
-				//printf("Block at %d %d %d\n",NBT_integer_get(NBT_list_get(pos,0)),
-        //                           NBT_integer_get(NBT_list_get(pos,1)),
-        //                           NBT_integer_get(NBT_list_get(pos,2)));
+								 NBT_integer_get(NBT_list_get(pos,1)),
+								 NBT_integer_get(NBT_list_get(pos,2)))=mask[palette_index];
 			}
 			ret = false;
 			free(mask);
+			SUCCESS("Volume generation!")
 			goto end;
 
 		cleanup:
@@ -196,9 +189,8 @@ bool Volume_from_nbt(Volume vol, const char *path, struct Blocks_transparrent *b
 		}
 	}
 error:
-	printf("[ERROR] NBT does not contain valid structure!");
+	ERROR("NBT does not contain valid structure!")
 end:
-	NBT_free(nbt);
 	return ret;
 
 }

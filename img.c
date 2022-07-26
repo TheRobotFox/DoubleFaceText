@@ -1,5 +1,6 @@
 #include "img.h"
 #include "img_internal.h"
+#include "info.h"
 #include <string.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -37,7 +38,10 @@ bool Image_from_color(Image img, int x, int y, unsigned char col)
 Image Image_load(const char *path)
 {
 	Image img = Image_create();
-	return Image_from_file(img, path) ? NULL : img;
+	if(Image_from_file(img, path))
+		return img;
+	free(img);
+	return NULL;
 }
 
 int Image_get_x(Image img){return img->x;}
@@ -50,7 +54,7 @@ unsigned char *Image_get(Image img, int x, int y)
 
 bool Image_save(Image img, const char * path)
 {
-	char indicator='p';
+	char indicator=0;
 	for(size_t i=1; i<strlen(path); i++)
 	{
 		if(path[i-1]=='.')
@@ -63,12 +67,18 @@ bool Image_save(Image img, const char * path)
 	{
 	case 'b':
 	case 'B':
-		return stbi_write_bmp(path, img->x, img->y, 1, img->data);
+		INFO("Saving image '%s' as Bitmap", path);
+		return !stbi_write_bmp(path, img->x, img->y, 1, img->data);
 	case 'j':
 	case 'J':
-		return stbi_write_jpg(path, img->x, img->y, 1, img->data, 50);
+		INFO("Saving image '%s' as Jpeg", path);
+		return !stbi_write_jpg(path, img->x, img->y, 1, img->data, 50);
 	default:
-		return stbi_write_png(path, img->x, img->y, 1, img->data, img->x);
+		INFO("Could not detect Image format!")
+	case 'p':
+	case 'P':
+		INFO("Saving image '%s' as PNG", path);
+		return !stbi_write_png(path, img->x, img->y, 1, img->data, img->x);
 	}
 }
 

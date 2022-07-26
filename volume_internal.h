@@ -5,4 +5,5 @@ struct Volume
 	bool ***data;
 };
 
+bool* Volume_get(Volume v, int x, int y, int z);
 

@@ -1,3 +1,4 @@
+#include "info.h"
 #include "mesh.h"
 #include "List/List.h"
 #include "volume_internal.h"
@@ -38,12 +39,11 @@ size_t List_get_or_make(List l, void* object)
 	return List_size(l)-1;
 }
 
-void Mesh_face_add(Mesh mesh,
-										struct Vertex a,
-										struct Vertex b,
-										struct Vertex c,
-										struct Vertex d
-										)
+void Mesh_face_add(Mesh mesh, struct Vertex a,
+							  struct Vertex b,
+							  struct Vertex c,
+							  struct Vertex d
+				  )
 {
 	struct Face face;
 	face.vertex_index[0]=List_get_or_make(mesh->vertecies,&a);
@@ -58,42 +58,40 @@ void Mesh_face_add(Mesh mesh,
 void Mesh_internal_face_X(Mesh mesh, int x, int y, int z)
 {
 
-	Mesh_face_add(mesh,
-								(struct Vertex){x-.5f,y-.5f,z-0.5f},
-								(struct Vertex){x-.5f,y+.5f,z-0.5f},
-								(struct Vertex){x-.5f,y+.5f,z+0.5f},
-								(struct Vertex){x-.5f,y-.5f,z+0.5f}
-								);
+	Mesh_face_add(mesh, (struct Vertex){x-.5f,y-.5f,z-0.5f},
+						(struct Vertex){x-.5f,y+.5f,z-0.5f},
+						(struct Vertex){x-.5f,y+.5f,z+0.5f},
+						(struct Vertex){x-.5f,y-.5f,z+0.5f}
+				 );
 }
 
 void Mesh_internal_face_Y(Mesh mesh, int x, int y, int z)
 {
 
-	Mesh_face_add(mesh,
-								(struct Vertex){x-.5f,y-.5f,z-0.5f},
-								(struct Vertex){x+.5f,y-.5f,z-0.5f},
-								(struct Vertex){x+.5f,y-.5f,z+0.5f},
-								(struct Vertex){x-.5f,y-.5f,z+0.5f}
-								);
+	Mesh_face_add(mesh, (struct Vertex){x-.5f,y-.5f,z-0.5f},
+						(struct Vertex){x+.5f,y-.5f,z-0.5f},
+						(struct Vertex){x+.5f,y-.5f,z+0.5f},
+						(struct Vertex){x-.5f,y-.5f,z+0.5f}
+				 );
 }
 void Mesh_internal_face_Z(Mesh mesh, int x, int y, int z)
 {
 
-	Mesh_face_add(mesh,
-								(struct Vertex){x-.5f,y-.5f,z-0.5f},
-								(struct Vertex){x-.5f,y+.5f,z-0.5f},
-								(struct Vertex){x+.5f,y+.5f,z-0.5f},
-								(struct Vertex){x+.5f,y-.5f,z-0.5f}
-								);
+	Mesh_face_add(mesh, (struct Vertex){x-.5f,y-.5f,z-0.5f},
+						(struct Vertex){x-.5f,y+.5f,z-0.5f},
+						(struct Vertex){x+.5f,y+.5f,z-0.5f},
+						(struct Vertex){x+.5f,y-.5f,z-0.5f}
+				 );
 }
 
-void Mesh_from_volume(Mesh mesh, Volume volume)
+bool Mesh_from_volume(Mesh mesh, Volume volume)
 {
 	bool inside;
 
-	puts("Calculating X faces");
+	SEG_BEGIN("Meshing")
 
-	bool *data = volume->data;
+	INFO("Calculating X faces")
+
 	for(int z=0; z<volume->z; z++)
 	{
 		for(int y=0; y<volume->y; y++)
@@ -101,7 +99,7 @@ void Mesh_from_volume(Mesh mesh, Volume volume)
 			inside=false;
 			for(int x=0; x<volume->x; x++)
 			{
-				if(inside!=*data++){
+				if(inside!=*Volume_get(volume, x,y,z)){
 					Mesh_internal_face_X(mesh, x,y,z);
 					inside=!inside;
 				}
@@ -112,11 +110,7 @@ void Mesh_from_volume(Mesh mesh, Volume volume)
 
 	}
 
-	puts("Calculating Y faces");
-	data = volume->data;
-	int row = volume->x;
-	int layer = row*volume->y;
-	int cube = layer*volume->z;
+	INFO("Calculating Y faces")
 
 	for(int x=0; x<volume->x; x++)
 	{
@@ -125,21 +119,17 @@ void Mesh_from_volume(Mesh mesh, Volume volume)
 			inside=false;
 			for(int y=0; y<volume->y; y++)
 			{
-				if(inside!=*data){
+				if(inside!=*Volume_get(volume, x,y,z)){
 					Mesh_internal_face_Y(mesh, x,y,z);
 					inside=!inside;
 				}
-				data+=row;
 			}
 			if(inside)
 				Mesh_internal_face_Y(mesh, x, volume->y,z);
 		}
-		data-=cube;
-		data++;
 	}
 
-	puts("Calculating Z faces");
-	data = volume->data;
+	INFO("Calculating Z faces")
 
 	for(int y=0; y<volume->y; y++)
 	{
@@ -148,19 +138,18 @@ void Mesh_from_volume(Mesh mesh, Volume volume)
 			inside=false;
 			for(int z=0; z<volume->z; z++)
 			{
-				if(inside!=*data){
+				if(inside!=*Volume_get(volume, x,y,z)){
 					Mesh_internal_face_Z(mesh, x,y,z);
 					inside=!inside;
 				}
-				data+=layer;
 			}
-			data-=cube;
-			data++;
 			if(inside)
 				Mesh_internal_face_Z(mesh, x,y,volume->z);
 		}
 	}
-
+	SEG_END
+	SUCCESS("Mesh generation!")
+	return false;
 }
 
 // Wavefront Obj
@@ -170,11 +159,14 @@ void Mesh_from_volume(Mesh mesh, Volume volume)
 
 bool Mesh_save_obj(Mesh mesh, const char *path)
 {
+	INFO("Saving Mesh at '%s' as Wavefront-Obj", path)
 	FILE *file = fopen(path, "w");
 
 	if(file){
 
-		// Write Vertex data 
+		INFO("Faces: %d Vertecies: %d\n", List_size(mesh->faces), List_size(mesh->vertecies))
+
+		// Write Vertex data
 		for(struct Vertex *v = List_start(mesh->vertecies),
 				*e = List_end(mesh->vertecies);
 				v != e; 	v++)
@@ -184,11 +176,13 @@ bool Mesh_save_obj(Mesh mesh, const char *path)
 		for(struct Face *f = List_start(mesh->faces),
 				*e = List_end(mesh->faces);
 				f != e; 	f++)
-			fprintf(file, "f %ld %ld %ld %ld\n", f->vertex_index[0]+1
-																		 , f->vertex_index[1]+1
-																		 , f->vertex_index[2]+1
-																		 , f->vertex_index[3]+1
-																		 );
+			fprintf(file, "f %ld %ld %ld %ld\n", f->vertex_index[0]+1,
+											     f->vertex_index[1]+1,
+											     f->vertex_index[2]+1,
+											     f->vertex_index[3]+1
+				   );
+
+		SUCCESS("exported! %s -> wrote %lu bytes", path, ftell(file))
 		fclose(file);
 		return false;
 	}
@@ -214,24 +208,24 @@ struct Triangle_data
 
 bool Mesh_save_stl(Mesh mesh, const char *path)
 {
+	INFO("Saving Mesh at '%s' as STL", path)
 	FILE *file = fopen(path, "wb");
 	if(file){
 
 		// Write empty header
-		uint8_t header[80] = "DoubleFaceText";
+		uint8_t header[80] = "header unused. Soo yeah... guess I just put some promo here UwU -NoHamster 2022";
 		fwrite(header, 1, 80, file);
 
 		uint32_t num_of_trig = 2*List_size(mesh->faces);
 		fwrite(&num_of_trig, 4, 1, file);
 
-		printf("Triangles: %d -> %d", num_of_trig, sizeof(struct Triangle_data));
+		INFO("Triangles: %u", num_of_trig)
 		// Tessellate Quad with two Triangles
 		struct Triangle_data trig1 = {0},
 												 trig2 = {0};
 
 		for(struct Face *f = List_start(mesh->faces),
-				*e = List_end(mesh->faces);
-				f != e; 	f++)
+				*e = List_end(mesh->faces); f != e; f++)
 		{
 			trig1.vertecies[0]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[0]);
 			trig1.vertecies[1]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[1]);
@@ -243,6 +237,8 @@ bool Mesh_save_stl(Mesh mesh, const char *path)
 			trig2.vertecies[2]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[0]);
 			fwrite(&trig2,50, 1, file);
 		}
+
+		SUCCESS("exported! %s -> wrote %lu bytes", path, ftell(file))
 		fclose(file);
 		return false;
 	}

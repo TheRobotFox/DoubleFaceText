@@ -1,4 +1,5 @@
 #include "img.h"
+#include "NBT.h"
 #include <stdlib.h>
 
 typedef struct Volume* Volume;
@@ -14,11 +15,9 @@ struct Blocks_transparrent
 	size_t size;
 };
 
-bool Volume_from_nbt(Volume vol, const char *path, struct Blocks_transparrent *blocks_transparrent);
+bool Volume_from_nbt(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_transparrent);
 
 bool Volume_to_shadow(Volume vol, Image *front, Image *side, Image *top);
-
-bool* Volume_get(Volume v, int x, int y, int z);
 
 bool Volume_to_nbt(Volume vol, const char *path);
 

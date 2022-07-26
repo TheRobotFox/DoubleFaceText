@@ -35,6 +35,8 @@ Type of Input
 ./dft TextA.png TextB.bmp FROM IMG IMG TO MESH AS output.obj
 ```
 Will interpret Images "TextA.png" and "TextB.bmp" as shadows of a 3D-Object and output a corresponding Wavefront-OBJ Mesh to "output.obj"
+
+
 ![Viz](https://user-images.githubusercontent.com/69124976/181050549-83ff47a5-f485-4ffb-b0ea-14c00f916170.png)
 
 ### OUTPUT TYPE

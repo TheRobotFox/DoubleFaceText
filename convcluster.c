@@ -51,6 +51,8 @@ CC_Task CC_Task_create()
 {
 	CC_Task task = malloc(sizeof(struct CC_Task));
 	memset(task, 0, sizeof(struct CC_Task));
+	task->start=UNKNOWN;
+	task->end=UNKNOWN;
 	return task;
 }
 
@@ -215,6 +217,10 @@ bool CC_solve(CC_Task task)
 	task->context.depth=0;
 	task->context.load_depth=0;
 
+	if(task->start == UNKNOWN || task->end == UNKNOWN) {
+		ERROR("Task contains unknown fields!")
+		return true;
+	}
 	// if gaol already reached
 	if(task->start==task->end)
 		goto success;

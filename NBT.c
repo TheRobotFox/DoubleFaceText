@@ -3,7 +3,7 @@
 #include <string.h>
 #include "zlib/zlib.h"
 #include <stdlib.h>
-#define INFO_LVL 3
+#define INFO_LVL 2
 #include "info/info.h"
 
 struct NBT_List
@@ -250,8 +250,7 @@ bool NBT_internal_Tag_body_load(struct NBT_Payload *data, enum NBT_TYPE type, gz
 				NBT_internal_value_load(&length, sizeof(int32_t), f);
 
 				HOLD
-				INFO("Loading List<%d>[%d]\n", (char)type, length)
-				PRINT("{\n")
+				INFO("Loading List<%d>[%d]", (char)type, length)
 				RELEASE
 
 				// if list not empty load elements, else zero
@@ -268,13 +267,11 @@ bool NBT_internal_Tag_body_load(struct NBT_Payload *data, enum NBT_TYPE type, gz
 				}else{
 					list->data=NULL;
 				}
-				PRINT("}\n")
 			} break;
 		case NBT_COMPOUND:
 			{
 				data->array = List_create(sizeof(struct NBT_Tag));
 				INFO("Loading Compound")
-				PRINT("{")
 				INDENT(1)
 				struct NBT_Tag element;
 				while((NBT_Tag_load(&element, f) != NBT_END))
@@ -282,7 +279,6 @@ bool NBT_internal_Tag_body_load(struct NBT_Payload *data, enum NBT_TYPE type, gz
 					List_append(data->array, &element);
 				}
 				INDENT(-1)
-				PRINT("}")
 
 			} break;
 		case NBT_ARRAY_INT:
@@ -464,12 +460,23 @@ bool NBT_from_file(NBT root, const char *path)
 	gzFile nbt_file = gzopen(path, "rb");
 	if(nbt_file){
 
+		size_t indent = INDENT(0);
+		INDENT(-indent)
+		MODE(format_structured)
+
+		PRINT("Loading %s", path)
+		INDENT(1)
+
 		// load content into NBT_Tag structure
 		NBT_Tag_load(root, nbt_file);
+
+		MODE(format_default)
+		INDENT(indent)
 
 		gzclose(nbt_file);
 		return false;
 	}
+	ERROR("Could not open file '%s'", path);
 
 	return true;
 };

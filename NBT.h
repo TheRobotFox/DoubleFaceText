@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "List/List.h"
+#include "info/List/List.h"
 typedef struct NBT_Tag* NBT;
 typedef struct NBT_Payload* NBT_Data;
 

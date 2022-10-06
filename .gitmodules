@@ -4,6 +4,3 @@
 [submodule "info"]
 	path = info
 	url = https://github.com/NoHamster/info
-[submodule "List"]
-	path = List
-	url = https://github.com/NoHamster/List

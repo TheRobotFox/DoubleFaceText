@@ -4,7 +4,7 @@
 #include "zlib/zlib.h"
 #include <stdlib.h>
 #define INFO_LVL 3
-#include "info.h"
+#include "info/info.h"
 
 struct NBT_List
 {
@@ -268,16 +268,13 @@ bool NBT_internal_Tag_body_load(struct NBT_Payload *data, enum NBT_TYPE type, gz
 				}else{
 					list->data=NULL;
 				}
-				PREFIX_OFFSET
-				PRINT("}\n");
+				PRINT("}\n")
 			} break;
 		case NBT_COMPOUND:
 			{
 				data->array = List_create(sizeof(struct NBT_Tag));
-				HOLD
-				INFO("Loading Compound\n")
-				PRINT("{\n")
-				RELEASE
+				INFO("Loading Compound")
+				PRINT("{")
 				INDENT(1)
 				struct NBT_Tag element;
 				while((NBT_Tag_load(&element, f) != NBT_END))
@@ -285,8 +282,7 @@ bool NBT_internal_Tag_body_load(struct NBT_Payload *data, enum NBT_TYPE type, gz
 					List_append(data->array, &element);
 				}
 				INDENT(-1)
-				PREFIX_OFFSET
-				PRINT("}\n")
+				PRINT("}")
 
 			} break;
 		case NBT_ARRAY_INT:

@@ -1,5 +1,5 @@
 #include "mesh.h"
-#include "info.h"
+#include "info/info.h"
 #include "convcluster.h"
 #include <string.h>
 
@@ -276,10 +276,10 @@ void usage(const char *name)
 {
 	HOLD
 	INFO("%s [INPUT] %s [INPUT TYPE] %s [OUTPUT TYPE] (%s [OUTPUT])\n", name, tag_names[0], tag_names[1], tag_names[2]);
-	PRINT("\t\t'INPUT' tag 		: {IMG_PATH or TEXT,...}[3] or NBT\n")
-	PRINT("\t\t'INPUT TYPE' tag : INPUT_TYPE[i] = INPUT[i].type eg. IMG/TEXT/NBT\n")
-	PRINT("\t\t'OUTPUT TYPE' tag: INPUT -> {OUTPUT_TYPE, ...}\n")
-	PRINT("\t\t'OUTPUT' tag 	: OUTPUT[i] = OUTPUT_TYPE[i].out_path\n")
+	PRINT("'INPUT'       : {IMG_PATH or TEXT,...}[3] or NBT\n")
+	PRINT("'INPUT TYPE'  : INPUT_TYPE[i] = INPUT[i].type eg. IMG/TEXT/NBT\n")
+	PRINT("'OUTPUT TYPE' : INPUT -> {OUTPUT_TYPE, ...}\n")
+	PRINT("'OUTPUT'      : OUTPUT[i] = OUTPUT_TYPE[i].out_path")
 	RELEASE
 }
 

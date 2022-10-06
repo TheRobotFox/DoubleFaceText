@@ -1,6 +1,6 @@
 #include "convcluster.h"
 #define INFO_LVL 5
-#include "info.h"
+#include "info/info.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -130,15 +130,15 @@ bool CC_internal_context_index_set(CC_Context context, int index)
 void CC_internal_error_path(CC_Context context, int index)
 {
 	PRINT(" [")
-	for(int i=0; i<context->depth; i++)
+	for(int i=0; i<context->path_length; i++)
 	{
 		if(i==index)
-			PRINT("{")
+			COLOR(255,0,0)
 		PRINT(CC_internal_STATE_names[context->previous[i]])
 		if(i==index)
-			PRINT("}")
+			COLOR(255,255,255)
 
-		if(i<context->depth-1)
+		if(i<context->path_length-1)
 			PRINT(", ")
 	}
 	PRINT("]")
@@ -241,7 +241,7 @@ bool CC_solve(CC_Task task)
 	{
 		if(task->context.rules[task->context.indexes[i]].convert(task->data, task->additional)){
 			HOLD
-			INFO("Path exceution failed!")
+			ERROR("Path exceution failed!")
 #if INFO_LVL > 4
 			CC_internal_error_path(&task->context, i);
 #endif

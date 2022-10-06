@@ -1,6 +1,6 @@
 #include "img.h"
 #include "img_internal.h"
-#include "info.h"
+#include "info/info.h"
 #include <string.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

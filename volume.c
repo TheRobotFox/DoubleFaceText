@@ -1,5 +1,5 @@
 #include "volume.h"
-#include "info.h"
+#include "info/info.h"
 #include "volume_internal.h"
 #include <stdio.h>
 #include <string.h>

@@ -471,6 +471,7 @@ bool NBT_from_file(NBT root, const char *path)
 		NBT_Tag_load(root, nbt_file);
 
 		MODE(format_default)
+		INDENT(-1)
 		INDENT(indent)
 
 		gzclose(nbt_file);

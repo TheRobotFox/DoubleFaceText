@@ -87,7 +87,7 @@ bool Image_save(Image img, const char * path)
 			indicator = path[i];
 	}
 
-	stbi_flip_vertically_on_write(true);
+	//stbi_flip_vertically_on_write(true);
 
 	switch(indicator)
 	{

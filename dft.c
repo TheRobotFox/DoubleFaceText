@@ -22,15 +22,34 @@ union CC_Data
 // Group to shadow
 bool TEXT_to_IMG(union CC_Data *data, void* _)
 {
-	size_t len = strlen(data->str);
+	size_t len = strlen(data->str),
+		   div=0,
+		   size=0;
+
+	for(int i=0; i<len-1; i++)
+	{
+		if(data->str[i]==':')
+			div=i;
+	}
+
+	if(div){
+		INFO("found attr at %d", div)
+		size = strtoul(data->str+div+1, NULL, 10);
+		if(size)
+			len=div;
+	}
+	if(!size)
+		size=font.height;
+
+
 	INFO("Rasterizing string '%s'[%d]", data->str, len)
 
-	Font_Rect rect = Font_string_dimensions(&font, data->str, len, font.height);
+	Font_Rect rect = Font_string_dimensions(&font, data->str, len, size);
 	INFO("String dimensions %d, %d", rect.width, rect.height)
 
 	Image img = Image_create();
 	Image_from_color(img, rect.width, rect.height, (unsigned char)255);
-	int printed = Font_render_string_rect(&font, data->str, len, 0, 0, font.height, f_Image_draw_rect, (void*)img);
+	int printed = Font_render_string_rect(&font, data->str, len, 0, 0, size, f_Image_draw_rect, (void*)img);
 
 	if(printed!=len)
 		return true;

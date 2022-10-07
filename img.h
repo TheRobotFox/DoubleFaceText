@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "NoFont/Font_Driver.h"
 
 typedef struct Image* Image;
 
@@ -14,6 +15,8 @@ int Image_get_x(Image img);
 int Image_get_y(Image img);
 
 unsigned char *Image_get(Image img, int x, int y);
+
+int f_Image_draw_rect(Font_Rect *rect, void *arg);
 
 bool Image_save(Image img, const char *path);
 void Image_free(Image img);

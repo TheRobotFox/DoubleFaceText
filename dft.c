@@ -1,8 +1,8 @@
 #include "mesh.h"
 #include "info/info.h"
 #include "convcluster.h"
+#include "Font.font.h"
 #include <string.h>
-
 
 union CC_Data
 {
@@ -22,8 +22,21 @@ union CC_Data
 // Group to shadow
 bool TEXT_to_IMG(union CC_Data *data, void* _)
 {
-	ERROR("Text rasterizer not implemented!")
-	return true;
+	size_t len = strlen(data->str);
+	INFO("Rasterizing string '%s'[%d]", data->str, len)
+
+	Font_Rect rect = Font_string_dimensions(&font, data->str, len, font.height);
+	INFO("String dimensions %d, %d", rect.width, rect.height)
+
+	Image img = Image_create();
+	Image_from_color(img, rect.width, rect.height, (unsigned char)255);
+	int printed = Font_render_string_rect(&font, data->str, len, 0, 0, font.height, f_Image_draw_rect, (void*)img);
+
+	if(printed!=len)
+		return true;
+
+	data->img = img;
+	return false;
 }
 
 bool LOAD_IMG(union CC_Data *data, void* _)
@@ -180,8 +193,12 @@ bool SHADOW_OUTPUT(union CC_Data *data, void *_path)
 	name_buf[len]='_';
 	for(int i=0; i<3; i++)
 	{
+		if(!data->shadow[i])
+			continue;
+
 		name_buf[len+1]=0;
 		snprintf(name_buf, NAME_BUF_SIZE, "%s_%s%s", path, SHADOW_names[i], name_suffix_buf);
+		INFO("Exporting Shadow '%s'", SHADOW_names[i])
 		ret +=Image_save(data->shadow[i], name_buf);
 		Image_free(data->shadow[i]);
 	}

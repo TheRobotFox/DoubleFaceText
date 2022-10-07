@@ -31,7 +31,7 @@ bool Image_from_color(Image img, int x, int y, unsigned char col)
 	img->x=x;
 	img->y=y;
 	img->data=malloc(img->x*img->y);
-	memset(img->data, 255, img->x*img->y);
+	memset(img->data, col, img->x*img->y);
 	return 0;
 }
 
@@ -50,6 +50,32 @@ int Image_get_y(Image img){return img->y;}
 unsigned char *Image_get(Image img, int x, int y)
 {
 	return img->data+img->x*y+x;
+}
+
+int f_Image_draw_rect(Font_Rect *rect, void *arg)
+{
+	Image img = (Image)arg;
+
+	size_t x_size=rect->x+rect->width;
+	size_t y_size=rect->y+rect->height;
+
+	if(x_size>img->x){
+		ERROR("OOB: Imagesize_X=%d, Drawspan=%d+%d", img->x, rect->x,rect->width)
+		return true;
+	}
+	if(y_size>img->y){
+		ERROR("OOB: Imagesize_Y=%d, Drawspan=%d+%d", img->y, rect->y,rect->height)
+		return true;
+	}
+
+	for(int y=0; y<rect->height; y++)
+	{
+		for(int x=0; x<rect->width; x++)
+		{
+			img->data[(rect->y+y)*img->x+x+rect->x]=0;
+		}
+	}
+	return false;
 }
 
 bool Image_save(Image img, const char * path)

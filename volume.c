@@ -81,7 +81,7 @@ bool Volume_from_shadow_3(Volume vol, Image front, Image side, Image top)
 bool Volume_from_shadow_2(Volume vol, Image front, Image side)
 {
 	if(Image_get_y(front)!=Image_get_y(side)){
-		ERROR("Side shadowmaps missalign in height!")
+		ERROR("Side shadowmaps missalign in height! %d, %d", Image_get_y(front), Image_get_y(side))
 		return true;
 	}
 

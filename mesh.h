@@ -17,3 +17,5 @@ void Mesh_face_add(Mesh mesh, struct Vertex a,
 bool Mesh_save_obj(Mesh mesh, const char *path);
 bool Mesh_save_stl(Mesh mesh, const char *path);
 void Mesh_free(Mesh mesh);
+
+bool Trig_to_Volume(List trigs:wq

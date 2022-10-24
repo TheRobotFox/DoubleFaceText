@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 
 #define THRESHOLD 128
@@ -89,7 +90,7 @@ bool Volume_from_shadow_2(Volume vol, Image front, Image side)
 			height=Image_get_y(front),
 			length=Image_get_x(side);
 
-	INFO("Voxel Volume dimensions: X %d Y %d Z %d\n", width, height, length)
+	INFO("Voxel Volume dimensions: X %d Y %d Z %d", width, height, length)
 
 	Volume_allocate(vol, width, height, length);
 
@@ -105,7 +106,8 @@ bool Volume_from_shadow_2(Volume vol, Image front, Image side)
 
 char *blocks_transparrent_names[] = {
 	"minecraft:air",
-	"minecraft:torch"
+	"minecraft:torch",
+	"minecraft:redstone"
 };
 
 struct Blocks_transparrent blocks_transparrent_default = { blocks_transparrent_names, sizeof(blocks_transparrent_names)/sizeof(*blocks_transparrent_names)};
@@ -120,81 +122,277 @@ bool util_contains_string(struct Blocks_transparrent *container, char *str)
 	return 0;
 }
 
-bool Volume_from_nbt(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_transparrent)
+int max(int a, int b)
+{
+	if(a>b)
+		return a;
+	return b;
+}
+
+int min(int a, int b)
+{
+	if(a<b)
+		return a;
+	return b;
+}
+bool Volume_from_NBT(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_transparrent)
 {
 	bool ret = true;
 
-	NBT_Data size =   NBT_data_get(NBT_compound_get_name(NBT_data_get(nbt), "size"));
-	NBT_Data blocks = NBT_data_get(NBT_compound_get_name(NBT_data_get(nbt), "blocks"));
-	NBT_Data palette = NBT_data_get(NBT_compound_get_name(NBT_data_get(nbt), "palette"));
+	NBT_Data size =   NBT_data(NBT_compound_get_name(NBT_data(nbt), "size"));
+	NBT_Data blocks = NBT_data(NBT_compound_get_name(NBT_data(nbt), "blocks"));
+	NBT_Data palette = NBT_data(NBT_compound_get_name(NBT_data(nbt), "palette"));
 
-	if(blocks && size && palette){
-		if(NBT_list_length(size)==3 && NBT_list_type_get(size)==NBT_INT){
-
-			vol->x = NBT_integer_get(NBT_list_get(size,0));
-			vol->y = NBT_integer_get(NBT_list_get(size,1));
-			vol->z = NBT_integer_get(NBT_list_get(size,2));
-			INFO("allocate Voxel Volume x: %d y: %d z: %d", vol->x, vol->y, vol->z);
-
-			Volume_allocate(vol, vol->x, vol->y, vol->z);
-
-
-			INFO("Creating transparrency Mask")
-
-			if(!blocks_transparrent)
-				blocks_transparrent = &blocks_transparrent_default;
-
-			size_t palette_count = NBT_list_length(palette);
-			bool *mask = malloc(palette_count);
-
-			char *name;
-			for(int i=0; i<palette_count; i++)
-			{
-				name = NBT_string_get(NBT_data_get(NBT_compound_get_index(NBT_list_get(palette,i),0)));
-				if(name)
-					mask[i] =!util_contains_string(blocks_transparrent, name);
-				else
-					goto cleanup;
-			}
-
-			INFO("Writing Voxels")
-
-			size_t block_count = NBT_list_length(blocks),
-						 palette_index;
-			NBT_Data block, pos;
-			for(size_t i=0; i<block_count; i++)
-			{
-				block = NBT_list_get(blocks, i);
-				pos = NBT_data_get(NBT_compound_get_index(block, 0));
-
-				if(NBT_list_length(pos)!=3)
-					goto cleanup;
-
-				palette_index = NBT_integer_get(NBT_data_get(NBT_compound_get_index(block,1)));
-				if(palette_index>palette_count)
-					goto cleanup;
-
-				*Volume_get(vol, NBT_integer_get(NBT_list_get(pos,0)),
-								 NBT_integer_get(NBT_list_get(pos,1)),
-								 NBT_integer_get(NBT_list_get(pos,2)))=mask[palette_index];
-			}
-			ret = false;
-			free(mask);
-			SUCCESS("Volume generation!")
-			goto end;
-
-		cleanup:
-			free(mask);
-			goto error;
-		}
+	if(!blocks) {
+		ERROR("Could not load 'blocks'")
+			return true;
 	}
-error:
-	ERROR("NBT does not contain valid structure!")
-end:
-	return ret;
+	if(!palette) {
+		ERROR("Could not load 'palette'")
+			return true;
+	}
+	if(!size) {
+		ERROR("Could not load 'size'")
+			return true;
+	}
+/*
+	if(NBT_list_length(size)!=3 || NBT_list_type_get(size)!=NBT_INT){
+		ERROR("'size' Tag malformed")
+		return true;
+	}
+
+	vol->x = NBT_integer_get(NBT_list_get(size,0));
+	vol->y = NBT_integer_get(NBT_list_get(size,1));
+	vol->z = NBT_integer_get(NBT_list_get(size,2));
+*/
+
+
+	INFO("Creating transparrency Mask")
+
+	if(!blocks_transparrent)
+		blocks_transparrent = &blocks_transparrent_default;
+
+	size_t palette_count = NBT_list_length(palette);
+	bool *mask = malloc(palette_count);
+
+	char *name;
+	for(int i=0; i<palette_count; i++)
+	{
+		name = NBT_string_get(NBT_data(NBT_compound_get_index(NBT_list_get(palette,i),0)));
+		if(name)
+			mask[i] =!util_contains_string(blocks_transparrent, name);
+		else
+			goto cleanup;
+	}
+
+	NBT_Data block, pos;
+
+	size_t block_count = NBT_list_length(blocks),
+		   palette_index,
+		   i;
+
+	INFO("Found %d blocks", block_count)
+
+	//calulate actual size of structure
+
+	int x_min=0,
+	    y_min=0,
+	    z_min=0,
+	    x_max=0,
+        y_max=0,
+        z_max=0,
+		x,y,z;
+
+	for(i=0; i < block_count; i++)
+	{
+		block = NBT_list_get(blocks, i);
+		pos = NBT_data(NBT_compound_get_name(block, "pos"));
+
+		if(!pos){
+			ERROR("Could not find block 'pos'")
+			goto cleanup;
+		}
+		if(NBT_list_length(pos)!=3)
+			goto cleanup;
+
+		palette_index = NBT_integer_get(NBT_data(NBT_compound_get_name(block,"state")));
+		if(palette_index>palette_count)
+			goto cleanup;
+
+		x=NBT_integer_get(NBT_list_get(pos,0));
+		y=NBT_integer_get(NBT_list_get(pos,1));
+		z=NBT_integer_get(NBT_list_get(pos,2));
+
+		x_min = min(x_min, x);
+		y_min = min(y_min, y);
+		z_min = min(z_min, z);
+
+		x_max = max(x_max, x);
+		y_max = max(y_max, y);
+		z_max = max(z_max, z);
+	}
+
+	vol->x=x_max-x_min+1;
+	vol->y=y_max-y_min+1;
+	vol->z=z_max-z_min+1;
+
+	INFO("allocate Voxel Volume x: %d y: %d z: %d", vol->x, vol->y, vol->z);
+
+	Volume_allocate(vol, vol->x, vol->y, vol->z);
+
+
+	INFO("Writing Voxels")
+
+	for(i=0; i<block_count; i++)
+	{
+		block = NBT_list_get(blocks, i);
+		pos = NBT_data(NBT_compound_get_name(block, "pos"));
+
+		if(!pos){
+			ERROR("Could not find block 'pos'")
+			goto cleanup;
+		}
+		if(NBT_list_length(pos)!=3)
+			goto cleanup;
+
+		palette_index = NBT_integer_get(NBT_data(NBT_compound_get_name(block,"state")));
+		if(palette_index>palette_count)
+			goto cleanup;
+
+		x=NBT_integer_get(NBT_list_get(pos,0))-x_min;
+		y=NBT_integer_get(NBT_list_get(pos,1))-y_min;
+		z=NBT_integer_get(NBT_list_get(pos,2))-z_min;
+
+		*Volume_get(vol, x, y, z)=mask[palette_index];
+	}
+	ret = false;
+	free(mask);
+	SUCCESS("Volume generation!")
+	return false;
+
+cleanup:
+	ERROR("block at index '%ld' is malformed", i);
+	free(mask);
+	return true;
 
 }
 
+bool Volume_to_NBT(Volume vol, NBT nbt, char *material_name)
+{
+	NBT tmp = NBT_create();
+	// Compound
+	NBT_type_set(nbt, NBT_COMPOUND);
+
+	// 		DataVersion
+	INFO("creating 'DataVersion'")
+	NBT data_version = NBT_create();
+	{
+		NBT_type_set(data_version, NBT_INT);
+		NBT_integer_set(NBT_data(data_version), 3105);
+	}
+	// 		size
+	INFO("creating 'size' -> %d | %d | %d", vol->x, vol->y, vol->z)
+	NBT size = NBT_create();
+	{
+		NBT_type_set(size, NBT_LIST);
+		NBT_list_type_set(NBT_data(size), NBT_INT);
+
+		NBT_integer_set(NBT_data(tmp), vol->x);
+		NBT_list_set(NBT_data(size), 0, NBT_data(tmp));
+		NBT_integer_set(NBT_data(tmp), vol->y);
+		NBT_list_set(NBT_data(size), 1, NBT_data(tmp));
+		NBT_integer_set(NBT_data(tmp), vol->z);
+		NBT_list_set(NBT_data(size), 2, NBT_data(tmp));
+	}
+	// 		blocks
+	INFO("writing block data");
+	NBT blocks = NBT_create();
+	{
+		NBT_type_set(blocks, NBT_LIST);
+		NBT_list_type_set(NBT_data(blocks), NBT_COMPOUND);
+
+		size_t blocks_index=0;
+
+		for(int z=0; z<vol->z; z++)
+		{
+			for(int y=0; y<vol->y; y++)
+			{
+				for(int x=0; x<vol->x; x++)
+				{
+					if(*Volume_get(vol, x, y, z)){
+
+						NBT block = NBT_create();
+						NBT_type_set(block, NBT_COMPOUND);
+
+	// 			pos
+						NBT pos = NBT_create();
+						NBT_type_set(pos, NBT_LIST);
+						NBT_list_type_set(NBT_data(pos), NBT_INT);
+
+						NBT_integer_set(NBT_data(tmp), x);
+						NBT_list_set(NBT_data(pos), 0, NBT_data(tmp));
+						NBT_integer_set(NBT_data(tmp), y);
+						NBT_list_set(NBT_data(pos), 1, NBT_data(tmp));
+						NBT_integer_set(NBT_data(tmp), z);
+						NBT_list_set(NBT_data(pos), 2, NBT_data(tmp));
+						NBT_compound_set_name(NBT_data(block), "pos", pos);
+
+	// 			palette
+						NBT palette = NBT_create();
+						NBT_type_set(palette, NBT_INT);
+						NBT_integer_set(NBT_data(palette), 0);
+
+						NBT_compound_set_name(NBT_data(block), "state", palette);
+
+						//INFO("appending block")
+						NBT_list_set(NBT_data(blocks), blocks_index++, NBT_data(block));
+
+						free(block);
+						free(palette);
+						free(pos);
+					}
+
+				}
+			}
+		}
+		INFO("Wrote %d blocks", NBT_list_length(NBT_data(blocks)))
+	}
+	// 		palette
+	INFO("creating 'palette' using '%s'", material_name)
+	NBT palette = NBT_create();
+	{
+		NBT_type_set(palette, NBT_LIST);
+		NBT_list_type_set(NBT_data(palette), NBT_COMPOUND);
+
+		NBT material = NBT_create();
+		NBT_type_set(material, NBT_COMPOUND);
+
+		NBT material_tag = NBT_create();
+		NBT_type_set(material_tag, NBT_STRING);
+		NBT_string_set(NBT_data(material_tag), material_name);
+
+		NBT_compound_set_name(NBT_data(material), "Name", material_tag);
+
+		NBT_list_set(NBT_data(palette), 0, NBT_data(material));
+		free(material);
+		free(material_tag);
+	}
+
+	INFO("Filling NBT")
+	NBT_compound_set_name(NBT_data(nbt), "DataVersion", data_version);
+	NBT_compound_set_name(NBT_data(nbt), "size", size);
+	NBT_compound_set_name(NBT_data(nbt), "blocks", blocks);
+	NBT_compound_set_name(NBT_data(nbt), "palette", palette);
+
+	// cleanup
+	free(tmp);
+	free(data_version);
+	free(size);
+	free(blocks);
+	free(palette);
+
+	return false;
+}
 bool Volume_to_shadow(Volume vol, Image *front, Image *side, Image *top)
 {
 	*front = Image_create();

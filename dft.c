@@ -3,6 +3,7 @@
 #include "convcluster.h"
 #include "Font.font.h"
 #include <string.h>
+#include <stdio.h>
 
 union CC_Data
 {
@@ -135,7 +136,7 @@ bool SHADOW_to_VOLUME(union CC_Data *data, void *_)
 bool NBT_to_VOLUME(union CC_Data *data, void *_)
 {
 	Volume vol = Volume_create();
-	bool ret = Volume_from_nbt(vol, data->nbt, NULL);
+	bool ret = Volume_from_NBT(vol, data->nbt, NULL);
 	NBT_free(data->nbt);
 	data->vol=vol;
 	return ret;
@@ -174,11 +175,24 @@ bool VOLUME_to_SHADOW(union CC_Data *data, void *_)
 	return ret;
 }
 
+bool VOLUME_to_NBT(union CC_Data *data, void *_)
+{
+	NBT nbt = NBT_create();
+	Volume vol = data->vol;
+	Volume_to_NBT(vol, nbt, "minecraft:stone");
+	Volume_free(vol);
+
+	data->nbt=nbt;
+	return false;
+}
+
 bool NBT_OUTPUT(union CC_Data *data, void *path)
 {
-	ERROR("NBT output not implemented!")
-	return true;
+	NBT_to_file(data->nbt, path);
+	NBT_free(data->nbt);
+	return false;
 }
+
 
 const char* SHADOW_names[]={
 	"front",
@@ -264,7 +278,8 @@ struct CC_Rule main_rules[]={
 	{NBT_VOL, NBT_OUT, NBT_OUTPUT},
 	{SHADOW, SHADOW_OUT, SHADOW_OUTPUT},
 	{MESH, MESH_OUT, MESH_OUTPUT},
-	//{VOLUME, NBT, VOLUME_to_NBT}
+	{VOLUME, NBT_VOL, VOLUME_to_NBT},
+	{NBT_VOL, NBT_OUT, NBT_OUTPUT}
 };
 
 

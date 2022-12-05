@@ -7,6 +7,8 @@ struct Vertex
 	float x,y,z;
 };
 
+typedef	struct Vertex Trig[3];
+
 Mesh Mesh_create();
 bool Mesh_from_volume(Mesh mesh, Volume volume);
 void Mesh_face_add(Mesh mesh, struct Vertex a,

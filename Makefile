@@ -9,13 +9,14 @@ source:= $(wildcard *.c) \
 				 $(wildcard zlib/*.c)
 
 obj:= $(source:.c=.o)
-dft: $(obj)
+dft: $(obj) 
 	$(CC) $^ $(CFLAGS) -o $@
+
 clean:
 	rm $(obj)
 
 Font.font.h: Font.bmp
 	python NoFont/img2font.py Font.bmp "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()[]{}!?\"=/\'+-*#.,_" true
 
-dft.c: Font.font.h
+dft.o: Font.font.h
 

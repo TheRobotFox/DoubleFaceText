@@ -268,6 +268,10 @@ bool MESH_OUTPUT(union CC_Data *data, void *_path)
 	return ret;
 }
 
+bool MESH_OUTPUT(union CC_Data *data, void *_path)
+{
+
+
 struct CC_Rule main_rules[]={
 	{INPUT_GROUP, SHADOW, INPUT_GROUP_to_SHADOW},
 	{SHADOW, VOLUME, SHADOW_to_VOLUME},
@@ -280,6 +284,7 @@ struct CC_Rule main_rules[]={
 	{MESH, MESH_OUT, MESH_OUTPUT},
 	{VOLUME, NBT_VOL, VOLUME_to_NBT},
 	{NBT_VOL, NBT_OUT, NBT_OUTPUT}
+	{MESH, VOLUME, MESH_VOLUME},
 };
 
 
@@ -293,6 +298,7 @@ const char *input_names[] = {
 	"IMG",
 	"TEXT",
 	"NBT",
+	"MESH",
 };
 
 const char *output_names[] = {

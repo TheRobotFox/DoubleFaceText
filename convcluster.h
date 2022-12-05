@@ -11,6 +11,7 @@
         FUNC(IN_NBT) 	       	\
         FUNC(IN_IMG) 	       	\
         FUNC(IN_TEXT) 		    \
+        FUNC(IN_MESH) 		    \
         FUNC(INPUT_GROUP)	    \
 								\
         FUNC(SHADOW_OUT)  	    \

@@ -1,3 +1,4 @@
+#pragma once
 #include <stdbool.h>
 
 // Thanks to https://stackoverflow.com/questions/9907160/how-to-convert-enum-names-to-string-in-c
@@ -5,15 +6,16 @@
         FUNC(SHADOW)  		    \
         FUNC(NBT_VOL)      	    \
         FUNC(MESH) 		        \
-		FUNC(IMG)               \
-		FUNC(VOLUME)	       	\
-						       	\
+        FUNC(IMG)               \
+        FUNC(VOLUME)	       	\
+        FUNC(TRIGS)	       	\
+						       	            \
         FUNC(IN_NBT) 	       	\
         FUNC(IN_IMG) 	       	\
         FUNC(IN_TEXT) 		    \
         FUNC(IN_MESH) 		    \
         FUNC(INPUT_GROUP)	    \
-								\
+								                \
         FUNC(SHADOW_OUT)  	    \
         FUNC(NBT_OUT)      	    \
         FUNC(MESH_OUT) 	        \

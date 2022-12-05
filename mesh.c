@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <errno.h>
 
 struct Face
 {
@@ -152,6 +153,7 @@ bool Mesh_from_volume(Mesh mesh, Volume volume)
 	return false;
 }
 
+
 // Wavefront Obj
 // ASCII
 // Vertex data: v [x] [y] [z] \n
@@ -205,6 +207,32 @@ struct Triangle_data
 };
 
 #pragma pack(pop)
+
+List Mesh_read_stl(const char *path)
+{
+	INFO("Reading STL from: %s", path);
+
+	FILE *f=fopen(path, "rb");
+
+	if(f==0){
+		ERROR("Could not open file: %s", strerror(errno))
+		return NULL;
+	}
+
+	fseek(f, 80, SEEK_SET);
+
+	List l = List_create(sizeof(Trig));
+
+	struct Triangle_data data;
+	while(!feof(f))
+	{
+		fread(&data, sizeof(data), 1, f);
+		List_append(l, (Trig*)&data.vertecies);
+	}
+
+	fclose(f);
+	INFO("Read %d Triangles!", List_size(l))
+}
 
 bool Mesh_save_stl(Mesh mesh, const char *path)
 {

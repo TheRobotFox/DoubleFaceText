@@ -4,10 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-<<<<<<< HEAD
-=======
 #include <float.h>
->>>>>>> 9eb7aff (Voxelizer)
 #include <math.h>
 
 

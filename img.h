@@ -1,3 +1,4 @@
+#pragma once
 #include <stdbool.h>
 #include "NoFont/Font_Driver.h"
 

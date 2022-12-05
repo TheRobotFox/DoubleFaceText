@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 #include "info/List/List.h"
 typedef struct NBT_Tag* NBT;

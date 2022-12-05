@@ -18,6 +18,7 @@ union CC_Data
 	Volume vol;
 	NBT nbt;
 	Mesh mesh;
+	List trigs;
 };
 
 // Group to shadow
@@ -268,9 +269,21 @@ bool MESH_OUTPUT(union CC_Data *data, void *_path)
 	return ret;
 }
 
-bool MESH_OUTPUT(union CC_Data *data, void *_path)
+bool MESH_IN(union CC_Data *data, void *_path)
 {
-
+	List trigs = Mesh_read_stl(data->str);
+	if(!trigs){
+		ERROR("Could not load mesh!")
+		return true;
+	}
+	data->trigs=trigs;
+	return false;
+}
+bool TRIGS_VOLUME(union CC_Data *data, void *_path)
+{
+	Volume vol = Volume_create();
+	Volume_from_mesh(vol, List_start(data->trigs), List_size(data->trigs), (size_t[3]){30,30,30});
+}
 
 struct CC_Rule main_rules[]={
 	{INPUT_GROUP, SHADOW, INPUT_GROUP_to_SHADOW},
@@ -283,8 +296,9 @@ struct CC_Rule main_rules[]={
 	{SHADOW, SHADOW_OUT, SHADOW_OUTPUT},
 	{MESH, MESH_OUT, MESH_OUTPUT},
 	{VOLUME, NBT_VOL, VOLUME_to_NBT},
-	{NBT_VOL, NBT_OUT, NBT_OUTPUT}
-	{MESH, VOLUME, MESH_VOLUME},
+	{NBT_VOL, NBT_OUT, NBT_OUTPUT},
+	{TRIGS, VOLUME, TRIGS_VOLUME},
+	{IN_MESH, TRIGS, MESH_IN},
 };
 
 

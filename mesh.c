@@ -232,6 +232,7 @@ List Mesh_read_stl(const char *path)
 
 	fclose(f);
 	INFO("Read %d Triangles!", List_size(l))
+	return l;
 }
 
 bool Mesh_save_stl(Mesh mesh, const char *path)

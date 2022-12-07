@@ -183,7 +183,7 @@ bool Volume_from_NBT(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_tra
 		if(name)
 			mask[i] =!util_contains_string(blocks_transparrent, name);
 		else
-			goto cleanup;
+			goto cleanup2;
 	}
 
 	NBT_Data block, pos;
@@ -273,6 +273,7 @@ bool Volume_from_NBT(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_tra
 
 cleanup:
 	ERROR("block at index '%ld' is malformed", i);
+cleanup2:
 	free(mask);
 	return true;
 
@@ -451,7 +452,7 @@ static float collision_distance(float x, float y, Trig t)
 	Vector n = Vector_cross(a,b);
 
 	// colinear
-	if(abs(n.z)<0.001)
+	if(fabsf(n.z)<0.02)
 		// maybe check for identicallity
 		return NAN;
 
@@ -494,8 +495,8 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 	};
 
 	INFO("Calculating Mesh dimensions!")
-	union coord max={{FLT_MIN,FLT_MIN,FLT_MIN}};
-	union coord min={{FLT_MAX,FLT_MAX,FLT_MAX}};;
+	union coord min={{FLT_MAX,FLT_MAX,FLT_MAX}};
+	union coord max={{-FLT_MAX,-FLT_MAX,-FLT_MAX}};
 
 	for(int i=0; i < length; i++)
 	{
@@ -503,24 +504,23 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 			union coord v = {mesh[i][p]};
 			for(int j=0; j<3; j++)
 			{
-				if(v.a[p]<min.a[j])
-					min.a[j]=v.a[p];
+				if(v.a[j]<min.a[j])
+					min.a[j]=v.a[j];
 
-				if(v.a[p]>max.a[j])
-					max.a[j]=v.a[p];
+				if(v.a[j]>max.a[j])
+					max.a[j]=v.a[j];
 			}
 		}
 	}
-
-	INFO("%f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f", min.v.x, max.v.x, min.v.y, max.v.y, min.v.y, max.v.y)
+	INFO("%f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f", min.v.x, max.v.x, min.v.y, max.v.y, min.v.z, max.v.z)
 
 	INFO("write chunks!")
 	List *chunks = malloc(sizeof(List)*res[0]*res[1]);
 
-	for(int i=0; i<res[0]*res[1]; i++)
+	for(size_t i=0; i<res[0]*res[1]; i++)
 		chunks[i]=List_create(sizeof(size_t));
 
-	for(int i=0; i<length; i++)
+	for(size_t i=0; i<length; i++)
 	{
 		// get Triangle dimensions (X and Y)
 		union coord trig_max={{FLT_MIN,FLT_MIN,FLT_MIN}};
@@ -543,8 +543,8 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 		size_t end[2];
 		for(int d=0; d<2; d++)
 		{
-			start[d] = (trig_min.a[d]-min.a[d])/max.a[d]*res[d];
-			end[d] = (trig_max.a[d]-min.a[d])/max.a[d]*res[d];
+			start[d] = (trig_min.a[d]-min.a[d])/(max.a[d]-min.a[d])*res[d];
+			end[d] = (trig_max.a[d]-min.a[d])/(max.a[d]-min.a[d])*res[d];
 		}
 		// write triangle to chunks
 		for(int y=start[1]; y<end[1]; y++)
@@ -552,33 +552,37 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 			for(int x=start[0]; x<end[0]; x++)
 			{
 				List c = chunks[y*res[0]+x];
-				List_append(c, i);
+				if(y*res[0]+x>res[0]*res[1])
+					;//printf("%d | %d\n", x ,y);
+				List_append(c, &i);
 			}
 		}
+		//printf("%d\n", i);
 	}
 
 	INFO("Calculate Collisions")
-	float x_step = (min.v.x-max.v.x)/res[0];
-	float y_step = (min.v.y-max.v.y)/res[1];
+	float x_step = (max.v.x-min.v.x)/res[0];
+	float y_step = (max.v.y-min.v.y)/res[1];
 	for(float y=min.v.y; y<max.v.y; y+=y_step)
 	{
 		for(float x=min.v.x; x<max.v.x; x+=x_step)
 		{
 			// get current chunk
-			size_t index_x = (x-min.v.x)/max.v.x*res[0];
-			size_t index_y = (y-min.v.y)/max.v.y*res[1];
+			size_t index_x = (x-min.v.x)/(max.v.x-min.v.x)*res[0];
+			size_t index_y = (y-min.v.y)/(max.v.y-min.v.y)*res[1];
 			List chunk = chunks[index_y*res[0]+index_x];
 			List collisions = List_create(sizeof(size_t));
 
-			for(size_t *t=List_start(chunk); t<List_end(chunk); t++)
+			for(size_t *t=List_start(chunk); t<(size_t*)List_end(chunk); t++)
 			{
 				// Calculate collision
 				float z = collision_distance(x,y, mesh[*t]);
 				if(!isnan(z)){
-					if(inside_trig((Vector){x,y,z}, mesh[*t]))
+					if(inside_trig((Vector){x,y,z}, mesh[*t])){
 						// rescale z
-						z = (min.v.z-max.v.z)/res[3];
+						size_t z = (max.v.z-min.v.z)/res[2];
 						List_append(collisions, &z);
+					}
 				}
 			}
 
@@ -587,18 +591,20 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 
 			// write collisions
 			size_t coll_index=0;
-			for(int z=0; z<res[3]; z++)
+			for(size_t z=0; z<res[2]; z++)
 			{
-				if(*(int*)List_get(collisions, coll_index)==z)
+				if(*(size_t*)List_get(collisions, coll_index)==z)
 					coll_index++;
 
-				*Volume_get(vol,x,y,z)=coll_index%2;
+				*Volume_get(vol,index_x,index_y,z)=coll_index%2;
 			}
+
+			List_free(collisions);
 		}
 	}
 
 	SUCCESS("Voxelisation done!")
-
+	return false;
 }
 
 void Volume_free(Volume v)

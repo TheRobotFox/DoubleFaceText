@@ -1,4 +1,4 @@
-CC=gcc
+CC=clang
 #CFLAGS:= -lm -Ofast -mavx2 -Wall -m64 -s -funsafe-math-optimizations
 CFLAGS:= -lm -Wall -m64 -fsanitize=address -g
 source:= $(wildcard *.c) \
@@ -16,7 +16,7 @@ clean:
 	rm -rf $(obj) Font.font.h
 
 Font.font.h: Font.bmp
-	python NoFont/img2font.py Font.bmp "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()[]{}!?\"=/\'+-*#.,_" true
+	python3 NoFont/img2font.py Font.bmp "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890()[]{}!?\"=/\'+-*#.,_" true
 
 dft.o: Font.font.h
 

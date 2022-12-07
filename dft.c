@@ -329,6 +329,8 @@ enum CC_STATE DFT_state_input_get(const char *str)
 		return IN_TEXT;
 	if(!strcmp("NBT", str))
 		return IN_NBT;
+	if(!strcmp("MESH", str))
+		return IN_MESH;
 	ERROR("Unknown input_type \"%s\"", str)
 	return UNKNOWN;
 }

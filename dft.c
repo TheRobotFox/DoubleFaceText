@@ -282,7 +282,10 @@ bool MESH_IN(union CC_Data *data, void *_path)
 bool TRIGS_VOLUME(union CC_Data *data, void *_path)
 {
 	Volume vol = Volume_create();
-	Volume_from_mesh(vol, List_start(data->trigs), List_size(data->trigs), (size_t[3]){30,30,30});
+	Volume_from_mesh(vol, List_start(data->trigs), List_size(data->trigs), (size_t[3]){20,20,20});
+	List_free(data->trigs);
+	data->vol=vol;
+	return false;
 }
 
 struct CC_Rule main_rules[]={

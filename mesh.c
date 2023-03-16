@@ -166,7 +166,7 @@ bool Mesh_save_obj(Mesh mesh, const char *path)
 
 	if(file){
 
-		INFO("Faces: %d Vertecies: %d\n", List_size(mesh->faces), List_size(mesh->vertecies))
+		INFO("Faces: %d Vertecies: %d", List_size(mesh->faces), List_size(mesh->vertecies))
 
 		// Write Vertex data
 		for(struct Vertex *v = List_start(mesh->vertecies),
@@ -220,11 +220,14 @@ List Mesh_read_stl(const char *path)
 	}
 
 	fseek(f, 80, SEEK_SET);
+	unsigned int count;
+	fread(&count, sizeof(count), 1, f);
 
 	List l = List_create(sizeof(Trig));
+	List_reserve(l, count);
 
 	struct Triangle_data data;
-	while(!feof(f))
+	for(int i=0; i<count; i++)
 	{
 		fread(&data, sizeof(data), 1, f);
 		List_append(l, (Trig*)&data.vertecies);

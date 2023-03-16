@@ -1,6 +1,7 @@
 CC=gcc
 #CFLAGS:= -lm -Ofast -mavx2 -Wall -m64 -s -funsafe-math-optimizations
-CFLAGS:= -lm -Wall -fsanitize=address -g
+CFLAGS:= -lm -Wall -m64 -fsanitize=address -g
+#CFLAGS:= -lm -Wall -m64 -ggdb
 source:= $(wildcard *.c) \
 				 $(wildcard List/*.c) \
 				 $(wildcard info/*.c) \

@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <math.h>
-
+#include <signal.h>
 
 #define THRESHOLD 128
 
@@ -404,6 +404,7 @@ bool Volume_to_shadow(Volume vol, Image *front, Image *side, Image *top)
 	*top   = Image_create();
 	Image_from_color(*top, vol->x, vol->z, 255);
 
+	INFO("Voxel resolution: %dx%dx%d", vol->x, vol->y, vol->z)
 	for(int y=0; y<vol->y; y++)
 	{
 		for(int x=0; x<vol->x; x++)
@@ -431,7 +432,7 @@ static Vector Vector_sub(Vector a, Vector b)
 
 static Vector Vector_cross(Vector a, Vector b)
 {
-	return (Vector){a.y+b.z - b.y - a.z, a.z+b.x - b.z - a.x, a.x+b.y - b.x-a.y};
+	return (Vector){a.y*b.z - b.y*a.z, a.z*b.x - b.z*a.x, a.x*b.y - b.x*a.y};
 }
 float Vector_dot(Vector a, Vector b)
 {
@@ -447,8 +448,8 @@ static float collision_distance(float x, float y, Trig t)
 	Vector gs = {x,y,0};
 	Vector s = t[0];
 
-	Vector a = Vector_sub(t[1], t[0]);
-	Vector b = Vector_sub(t[2], t[0]);
+	Vector a = Vector_sub(t[1], s);
+	Vector b = Vector_sub(t[2], s);
 	Vector n = Vector_cross(a,b);
 
 	// colinear
@@ -459,31 +460,37 @@ static float collision_distance(float x, float y, Trig t)
 	 return -(Vector_dot(s, n)-Vector_dot(gs,n))/n.z;
 }
 
+float Vector_angle(Vector a, Vector b)
+{
+	return (Vector_dot(a,b))/Vector_length(a)/Vector_length(b);
+}
+
 static bool inside_trig(Vector p, Trig t)
 {
-	Vector ab = Vector_sub(t[0],t[1]);
-	Vector ap = Vector_sub(t[0],p);
-	float range;
-	range=Vector_dot(ab,ap)/Vector_length(ab);
-	if(range<0 || range>1)
+	float a = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(p,t[0])));
+	float b = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(t[2], t[0])));
+
+	if(b/a>1 || b/a <0)
 		return false;
 
-	Vector bc = Vector_sub(t[1],t[2]);
-	Vector bp = Vector_sub(t[1],p);
-	range=Vector_dot(bc,bp)/Vector_length(bc);
-	if(range<0 || range>1)
+
+	a = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(p,t[2])));
+	b = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(t[1], t[2])));
+
+	if(b/a>1 || b/a <0)
 		return false;
 
-	Vector ca = Vector_sub(t[2],t[0]);
-	Vector cp = Vector_sub(t[2],p);
-	range=Vector_dot(ca,cp)/Vector_length(ca);
-	if(range<0 || range>1)
+	a = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(p,t[1]));
+	b = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(t[0], t[1]));
+
+	if(b/a>1 || b/a <0)
 		return false;
 
 	return true;
 }
 
-static bool cmp(void *a, void *b) { return *(int*)a<*(int*)b;}
+bool cmp(void *a, void *b) { return *(int*)a<*(int*)b;}
+void print(void *a) { printf("%d, ", *(size_t*)a);}
 
 bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 {
@@ -512,7 +519,8 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 			}
 		}
 	}
-	INFO("%f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f", min.v.x, max.v.x, min.v.y, max.v.y, min.v.z, max.v.z)
+	INFO("Mesh dimensions:\n%f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f", min.v.x, max.v.x, min.v.y, max.v.y, min.v.z, max.v.z)
+	INFO("Voxel resolution: %dx%dx%d", vol->x, vol->y, vol->z)
 
 	INFO("write chunks!")
 	List *chunks = malloc(sizeof(List)*res[0]*res[1]);
@@ -532,10 +540,10 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 			for(size_t j=0; j<2; j++)
 			{
 				if(v.a[p]<trig_min.a[j])
-					trig_min.a[j]=v.a[p];
+					trig_min.a[j]=v.a[j];
 
 				if(v.a[p]>trig_max.a[j])
-					trig_max.a[j]=v.a[p];
+					trig_max.a[j]=v.a[j];
 			}
 		}
 		// Calculate chunk span
@@ -543,44 +551,42 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 		size_t end[2];
 		for(size_t d=0; d<2; d++)
 		{
-			start[d] = (trig_min.a[d]-min.a[d])/(max.a[d]-min.a[d])*res[d];
-			end[d] = (trig_max.a[d]-min.a[d])/(max.a[d]-min.a[d])*res[d];
+			start[d] = (trig_min.a[d]-min.a[d])/(max.a[d]-min.a[d])*(res[d]);
+			end[d] = (trig_max.a[d]-min.a[d])/(max.a[d]-min.a[d])*(res[d]);
 		}
+		//printf("V: %f,%f,%f %f,%f,%f %f,%f,%f\nx: %d,%d y: %d,%d\n", mesh[i][0].x, mesh[i][0].y, mesh[i][0].z, mesh[i][1].x, mesh[i][1].y, mesh[i][1].z, mesh[i][2].x, mesh[i][2].y, mesh[i][2].z, start[0], end[0], start[1], end[1]);
 		// write triangle to chunks
 		for(size_t y=start[1]; y<end[1]; y++)
 		{
 			for(size_t x=start[0]; x<end[0]; x++)
 			{
 				List c = chunks[y*res[0]+x];
-				if(y*res[0]+x>res[0]*res[1])
-					;//printf("%d | %d\n", x ,y);
 				List_append(c, &i);
 			}
 		}
-		//printf("%d\n", i);
 	}
 
 	INFO("Calculate Collisions")
-	float x_step = (max.v.x-min.v.x)/res[0];
-	float y_step = (max.v.y-min.v.y)/res[1];
-	for(float y=min.v.y; y<max.v.y; y+=y_step)
+	for(size_t y=0; y<res[1]; y++)
 	{
-		for(float x=min.v.x; x<max.v.x; x+=x_step)
+		for(size_t x=0; x<res[0]; x++)
 		{
 			// get current chunk
-			size_t index_x = (x-min.v.x)/(max.v.x-min.v.x)*res[0];
-			size_t index_y = (y-min.v.y)/(max.v.y-min.v.y)*res[1];
-			List chunk = chunks[index_y*res[0]+index_x];
+			float fx = (float)x/res[0]*max.v.x+min.v.x;
+			float fy = (float)y/res[1]*max.v.y+min.v.y;
+
+			List chunk = chunks[y*res[0]+x];
 			List collisions = List_create(sizeof(size_t));
 
 			for(size_t *t=List_start(chunk); t<(size_t*)List_end(chunk); t++)
 			{
 				// Calculate collision
-				float z = collision_distance(x,y, mesh[*t]);
-				if(!isnan(z)){
-					if(inside_trig((Vector){x,y,z}, mesh[*t])){
+				float fz = collision_distance(fx,fy, mesh[*t]);
+				if(!isnan(fz)){
+					if(inside_trig((Vector){fx,fy,fz}, mesh[*t])){
+						//printf("Collision at %f\n", fz);
 						// rescale z
-						size_t z = (max.v.z-min.v.z)/res[2];
+						size_t z = (fz-min.v.z)/(max.v.z-min.v.z)*(res[2]);
 						List_append(collisions, &z);
 					}
 				}
@@ -588,20 +594,26 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 
 			// sort collisions
 			List_sort(collisions, cmp);
+			//List_foreach(collisions, print);
+			//printf("\n");
 
 			// write collisions
 			size_t coll_index=0;
-			for(size_t z=0; z<res[2]; z++)
+			for(size_t z=0; z<res[2] && coll_index<List_size(collisions); z++)
 			{
 				if(*(size_t*)List_get(collisions, coll_index)==z)
 					coll_index++;
 
-				*Volume_get(vol,index_x,index_y,z)=coll_index%2;
+				*Volume_get(vol,x,y,z)=coll_index%2;
 			}
 
 			List_free(collisions);
 		}
 	}
+
+	for(size_t i=0; i<res[0]*res[1]; i++)
+		List_free(chunks[i]);
+	free(chunks);
 
 	SUCCESS("Voxelisation done!")
 	return false;

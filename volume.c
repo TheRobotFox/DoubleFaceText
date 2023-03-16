@@ -10,7 +10,7 @@
 
 #define THRESHOLD 128
 
-bool* Volume_get(Volume v, int x, int y, int z) { return v->data[x][y]+z; }
+bool* Volume_get(Volume v, size_t x, size_t y, size_t z) { return v->data[x][y]+z; }
 
 Volume Volume_create()
 {
@@ -456,7 +456,7 @@ static float collision_distance(float x, float y, Trig t)
 		// maybe check for identicallity
 		return NAN;
 
-	 return (Vector_dot(s, n)+Vector_dot(gs,n))/n.z;
+	 return -(Vector_dot(s, n)-Vector_dot(gs,n))/n.z;
 }
 
 static bool inside_trig(Vector p, Trig t)
@@ -483,7 +483,7 @@ static bool inside_trig(Vector p, Trig t)
 	return true;
 }
 
-bool cmp(void *a, void *b) { return *(int*)a<*(int*)b;}
+static bool cmp(void *a, void *b) { return *(int*)a<*(int*)b;}
 
 bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 {
@@ -498,11 +498,11 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 	union coord min={{FLT_MAX,FLT_MAX,FLT_MAX}};
 	union coord max={{-FLT_MAX,-FLT_MAX,-FLT_MAX}};
 
-	for(int i=0; i < length; i++)
+	for(size_t i=0; i < length; i++)
 	{
-		for(int p=0; p<3; p++){
+		for(size_t p=0; p<3; p++){
 			union coord v = {mesh[i][p]};
-			for(int j=0; j<3; j++)
+			for(size_t j=0; j<3; j++)
 			{
 				if(v.a[j]<min.a[j])
 					min.a[j]=v.a[j];
@@ -523,13 +523,13 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 	for(size_t i=0; i<length; i++)
 	{
 		// get Triangle dimensions (X and Y)
-		union coord trig_max={{FLT_MIN,FLT_MIN,FLT_MIN}};
+		union coord trig_max={{-FLT_MAX,-FLT_MAX,-FLT_MAX}};
 		union coord trig_min={{FLT_MAX,FLT_MAX,FLT_MAX}};;
 
-		for(int p=0; p<3; p++){
+		for(size_t p=0; p<3; p++){
 			union coord v = {mesh[i][p]};
 
-			for(int j=0; j<2; j++)
+			for(size_t j=0; j<2; j++)
 			{
 				if(v.a[p]<trig_min.a[j])
 					trig_min.a[j]=v.a[p];
@@ -541,15 +541,15 @@ bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
 		// Calculate chunk span
 		size_t start[2];
 		size_t end[2];
-		for(int d=0; d<2; d++)
+		for(size_t d=0; d<2; d++)
 		{
 			start[d] = (trig_min.a[d]-min.a[d])/(max.a[d]-min.a[d])*res[d];
 			end[d] = (trig_max.a[d]-min.a[d])/(max.a[d]-min.a[d])*res[d];
 		}
 		// write triangle to chunks
-		for(int y=start[1]; y<end[1]; y++)
+		for(size_t y=start[1]; y<end[1]; y++)
 		{
-			for(int x=start[0]; x<end[0]; x++)
+			for(size_t x=start[0]; x<end[0]; x++)
 			{
 				List c = chunks[y*res[0]+x];
 				if(y*res[0]+x>res[0]*res[1])

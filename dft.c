@@ -70,8 +70,8 @@ bool LOAD_IMG(union CC_Data *data, void* _)
 }
 
 struct CC_Rule group_rules[]={
-	{IN_TEXT, IMG, TEXT_to_IMG},
-	{IN_IMG, IMG, LOAD_IMG},
+	{IN_TEXT, IMG , TEXT_to_IMG},
+	{IN_IMG ,  IMG, LOAD_IMG   },
 };
 
 bool INPUT_GROUP_to_SHADOW(union CC_Data *data, void* _)
@@ -282,26 +282,27 @@ bool MESH_IN(union CC_Data *data, void *_path)
 bool TRIGS_VOLUME(union CC_Data *data, void *_path)
 {
 	Volume vol = Volume_create();
-	Volume_from_mesh(vol, List_start(data->trigs), List_size(data->trigs), (size_t[3]){20,20,20});
+	//Volume_from_mesh(vol, List_start(data->trigs), List_size(data->trigs), (size_t[3]){30,30,30});
+	Mesh_to_slices(data->trigs, (size_t[3]){200, 200, 10});
 	List_free(data->trigs);
 	data->vol=vol;
 	return false;
 }
 
 struct CC_Rule main_rules[]={
-	{INPUT_GROUP, SHADOW, INPUT_GROUP_to_SHADOW},
-	{SHADOW, VOLUME, SHADOW_to_VOLUME},
-	{NBT_VOL, VOLUME, NBT_to_VOLUME},
-	{IN_NBT, NBT_VOL, LOAD_NBT},
-	{VOLUME, MESH, VOLUME_to_MESH},
-	{VOLUME, SHADOW, VOLUME_to_SHADOW},
-	{NBT_VOL, NBT_OUT, NBT_OUTPUT},
-	{SHADOW, SHADOW_OUT, SHADOW_OUTPUT},
-	{MESH, MESH_OUT, MESH_OUTPUT},
-	{VOLUME, NBT_VOL, VOLUME_to_NBT},
-	{NBT_VOL, NBT_OUT, NBT_OUTPUT},
-	{TRIGS, VOLUME, TRIGS_VOLUME},
-	{IN_MESH, TRIGS, MESH_IN},
+	{INPUT_GROUP, SHADOW,     INPUT_GROUP_to_SHADOW},
+	{SHADOW,      VOLUME,     SHADOW_to_VOLUME     },
+	{NBT_VOL,     VOLUME,     NBT_to_VOLUME        },
+	{IN_NBT,      NBT_VOL,    LOAD_NBT             },
+	{VOLUME,      MESH,       VOLUME_to_MESH       },
+	{VOLUME,      SHADOW,     VOLUME_to_SHADOW     },
+	{NBT_VOL,     NBT_OUT,    NBT_OUTPUT           },
+	{SHADOW,      SHADOW_OUT, SHADOW_OUTPUT        },
+	{MESH,        MESH_OUT,   MESH_OUTPUT          },
+	{VOLUME,      NBT_VOL,    VOLUME_to_NBT        },
+	{NBT_VOL,     NBT_OUT,    NBT_OUTPUT           },
+	{TRIGS,       VOLUME,     TRIGS_VOLUME         },
+	{IN_MESH,     TRIGS,      MESH_IN              },
 };
 
 

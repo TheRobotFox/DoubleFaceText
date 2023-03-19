@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <float.h>
-#include <math.h>
 #include <signal.h>
 
 #define THRESHOLD 128
@@ -423,200 +421,95 @@ bool Volume_to_shadow(Volume vol, Image *front, Image *side, Image *top)
 }
 
 
-typedef struct Vertex Vector;
-
-static Vector Vector_sub(Vector a, Vector b)
+bool Volume_from_mesh(Volume vol, List trigs, size_t res[3])
 {
-	return (Vector){a.x-b.x, a.y-b.y, a.z-b.z};
-}
+	/* Volume_allocate(vol, res[0], res[1], res[2]); */
 
-static Vector Vector_cross(Vector a, Vector b)
-{
-	return (Vector){a.y*b.z - b.y*a.z, a.z*b.x - b.z*a.x, a.x*b.y - b.x*a.y};
-}
-float Vector_dot(Vector a, Vector b)
-{
-	return a.x*b.x+a.y*b.y+a.z*b.z;
-}
-float Vector_length(Vector v)
-{
-	return sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
-}
+	/* INFO("Voxel resolution: %dx%dx%d", vol->x, vol->y, vol->z) */
 
-static float collision_distance(float x, float y, Trig t)
-{
-	Vector gs = {x,y,0};
-	Vector s = t[0];
+	/* /1* INFO("Mesh Dimensions %f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f", *1/ */
+	/* /1* 						mesh_dimentions.min.v.x, mesh_dimentions.max.v.x, *1/ */
+	/* /1* 						mesh_dimentions.min.v.y, mesh_dimentions.max.v.y, *1/ */
+	/* /1* 						mesh_dimentions.min.v.z, mesh_dimentions.max.v.z) *1/ */
 
-	Vector a = Vector_sub(t[1], s);
-	Vector b = Vector_sub(t[2], s);
-	Vector n = Vector_cross(a,b);
+	/* List chunks = Mesh_to_chunks(trigs, (size_t[3]){res[0], res[1], 1}); */
 
-	// colinear
-	if(fabsf(n.z)<0.02)
-		// maybe check for identicallity
-		return NAN;
-
-	 return -(Vector_dot(s, n)-Vector_dot(gs,n))/n.z;
-}
-
-float Vector_angle(Vector a, Vector b)
-{
-	return (Vector_dot(a,b))/Vector_length(a)/Vector_length(b);
-}
-
-static bool inside_trig(Vector p, Trig t)
-{
-	float a = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(p,t[0])));
-	float b = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(t[2], t[0])));
-
-	if(b/a>1 || b/a <0)
-		return false;
+	/* INFO("Calculate Collisions") */
 
 
-	a = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(p,t[2])));
-	b = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(t[1], t[2])));
+	/* size_t collisions_total = 0; */
+	/* for(size_t y=0; y<res[1]; y++) */
+	/* { */
+	/* 	// DEBUG */
+	/* 	Image i = Image_create(); */
+/* #define IMG_SCALE 10 */
+	/* 	Image_from_color(i, res[0]*IMG_SCALE, res[2]*IMG_SCALE, 0); */
 
-	if(b/a>1 || b/a <0)
-		return false;
+	/* 	for(size_t x=0; x<res[0]; x++) */
+	/* 	{ */
+	/* 		// Calculate space coordinates */
+	/* 		float fx = (float)(x+.5)/res[0]*(max.v.x-min.v.x)+min.v.x; */
+	/* 		float fy = (float)(y+.5)/res[1]*(max.v.y-min.v.y)+min.v.y; */
 
-	a = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(p,t[1]));
-	b = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(t[0], t[1]));
+	/* 		List chunk = chunks[y*res[0]+x]; */
+	/* 		List collisions = List_create(sizeof(size_t)); */
 
-	if(b/a>1 || b/a <0)
-		return false;
+	/* 		for(size_t *t=List_start(chunk); t<(size_t*)List_end(chunk); t++) */
+	/* 		{ */
+	/* 			// Calculate collision */
+	/* 			float fz = calulate_z(fx,fy, mesh[*t]); */
+	/* 			if(!isnan(fz)){ */
+	/* 				if(inside_trig((Vector){fx,fy,fz}, mesh[*t])){ */
 
-	return true;
-}
+	/* 					*Image_get(i, x*IMG_SCALE, (fz-min.v.z)/(max.v.z-min.v.z)*res[2]*IMG_SCALE) = 255; */
 
-bool cmp(void *a, void *b) { return *(int*)a<*(int*)b;}
-void print(void *a) { printf("%d, ", *(size_t*)a);}
+	/* 					// rescale z */
+	/* 					size_t z = (fz-min.v.z)/(max.v.z-min.v.z)*(res[2]); */
+	/* 					List_append(collisions, &z); */
+	/* 					collisions_total++; */
+	/* 				} */
+	/* 			} */
+	/* 		} */
 
-bool Volume_from_mesh(Volume vol, Trig *mesh, size_t length, size_t res[3])
-{
-	Volume_allocate(vol, res[0], res[1], res[2]);
 
-	union coord{
-		struct Vertex v;
-		float a[3];
-	};
+	/* 		// sort collisions */
+	/* 		List_sort(collisions, cmp); */
 
-	INFO("Calculating Mesh dimensions!")
-	union coord min={{FLT_MAX,FLT_MAX,FLT_MAX}};
-	union coord max={{-FLT_MAX,-FLT_MAX,-FLT_MAX}};
+	/* 		if(List_size(collisions)%2){ */
+	/* 			INFO("Inaccurate Detection of collisions at %d %d", x, y) */
+	/* 			List_foreach(collisions, print); */
+	/* 		} */
 
-	for(size_t i=0; i < length; i++)
-	{
-		for(size_t p=0; p<3; p++){
-			union coord v = {mesh[i][p]};
-			for(size_t j=0; j<3; j++)
-			{
-				if(v.a[j]<min.a[j])
-					min.a[j]=v.a[j];
+	/* 		// write collisions */
+	/* 		int coll_index=0; */
+	/* 		while(coll_index<(int)List_size(collisions)-1) */
+	/* 		{ */
+	/* 			size_t *start = List_get(collisions,coll_index++), */
+	/* 				   *end = List_get(collisions,coll_index++); */
+	/* 			if(*start==*end){ */
+	/* 				coll_index--; */
+	/* 				continue; */
+	/* 			} */
 
-				if(v.a[j]>max.a[j])
-					max.a[j]=v.a[j];
-			}
-		}
-	}
-	INFO("Mesh dimensions:\n%f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f", min.v.x, max.v.x, min.v.y, max.v.y, min.v.z, max.v.z)
-	INFO("Voxel resolution: %dx%dx%d", vol->x, vol->y, vol->z)
+	/* 			for(size_t z=*start; z<*end; z++) */
+	/* 				*Volume_get(vol, x, y, z) = 1; */
+	/* 		} */
 
-	INFO("write chunks!")
-	List *chunks = malloc(sizeof(List)*res[0]*res[1]);
+	/* 		List_free(collisions); */
+	/* 	} */
+	/* 	path[3]='a'+y; */
+	/* 	Image_save(i, path); */
+	/* 	Image_free(i); */
+	/* } */
 
-	for(size_t i=0; i<res[0]*res[1]; i++)
-		chunks[i]=List_create(sizeof(size_t));
+	/* INFO("Collision count: %llu", collisions_total) */
 
-	for(size_t i=0; i<length; i++)
-	{
-		// get Triangle dimensions (X and Y)
-		union coord trig_max={{-FLT_MAX,-FLT_MAX,-FLT_MAX}};
-		union coord trig_min={{FLT_MAX,FLT_MAX,FLT_MAX}};;
+	/* for(size_t i=0; i<res[0]*res[1]; i++) */
+	/* 	List_free(chunks[i]); */
+	/* free(chunks); */
 
-		for(size_t p=0; p<3; p++){
-			union coord v = {mesh[i][p]};
-
-			for(size_t j=0; j<2; j++)
-			{
-				if(v.a[p]<trig_min.a[j])
-					trig_min.a[j]=v.a[j];
-
-				if(v.a[p]>trig_max.a[j])
-					trig_max.a[j]=v.a[j];
-			}
-		}
-		// Calculate chunk span
-		size_t start[2];
-		size_t end[2];
-		for(size_t d=0; d<2; d++)
-		{
-			start[d] = (trig_min.a[d]-min.a[d])/(max.a[d]-min.a[d])*(res[d]);
-			end[d] = (trig_max.a[d]-min.a[d])/(max.a[d]-min.a[d])*(res[d]);
-		}
-		//printf("V: %f,%f,%f %f,%f,%f %f,%f,%f\nx: %d,%d y: %d,%d\n", mesh[i][0].x, mesh[i][0].y, mesh[i][0].z, mesh[i][1].x, mesh[i][1].y, mesh[i][1].z, mesh[i][2].x, mesh[i][2].y, mesh[i][2].z, start[0], end[0], start[1], end[1]);
-		// write triangle to chunks
-		for(size_t y=start[1]; y<end[1]; y++)
-		{
-			for(size_t x=start[0]; x<end[0]; x++)
-			{
-				List c = chunks[y*res[0]+x];
-				List_append(c, &i);
-			}
-		}
-	}
-
-	INFO("Calculate Collisions")
-	for(size_t y=0; y<res[1]; y++)
-	{
-		for(size_t x=0; x<res[0]; x++)
-		{
-			// get current chunk
-			float fx = (float)x/res[0]*max.v.x+min.v.x;
-			float fy = (float)y/res[1]*max.v.y+min.v.y;
-
-			List chunk = chunks[y*res[0]+x];
-			List collisions = List_create(sizeof(size_t));
-
-			for(size_t *t=List_start(chunk); t<(size_t*)List_end(chunk); t++)
-			{
-				// Calculate collision
-				float fz = collision_distance(fx,fy, mesh[*t]);
-				if(!isnan(fz)){
-					if(inside_trig((Vector){fx,fy,fz}, mesh[*t])){
-						//printf("Collision at %f\n", fz);
-						// rescale z
-						size_t z = (fz-min.v.z)/(max.v.z-min.v.z)*(res[2]);
-						List_append(collisions, &z);
-					}
-				}
-			}
-
-			// sort collisions
-			List_sort(collisions, cmp);
-			//List_foreach(collisions, print);
-			//printf("\n");
-
-			// write collisions
-			size_t coll_index=0;
-			for(size_t z=0; z<res[2] && coll_index<List_size(collisions); z++)
-			{
-				if(*(size_t*)List_get(collisions, coll_index)==z)
-					coll_index++;
-
-				*Volume_get(vol,x,y,z)=coll_index%2;
-			}
-
-			List_free(collisions);
-		}
-	}
-
-	for(size_t i=0; i<res[0]*res[1]; i++)
-		List_free(chunks[i]);
-	free(chunks);
-
-	SUCCESS("Voxelisation done!")
-	return false;
+	/* SUCCESS("Voxelisation done!") */
+	/* return false; */
 }
 
 void Volume_free(Volume v)

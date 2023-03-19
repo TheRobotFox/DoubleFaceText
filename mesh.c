@@ -3,7 +3,9 @@
 #include "info/List/List.h"
 #include "volume_internal.h"
 #include <stdio.h>
+#include <math.h>
 #include <stdint.h>
+#include <float.h>
 #include <string.h>
 #include <errno.h>
 
@@ -36,7 +38,7 @@ size_t List_get_or_make(List l, void* object)
 	uint8_t *found = List_find(l,_comp_vertex, object);
 	if(found)
 		return (found-(uint8_t*)List_start(l))/sizeof(struct Vertex);
-	List_append(l,object);
+	List_push(l,object);
 	return List_size(l)-1;
 }
 
@@ -52,7 +54,7 @@ void Mesh_face_add(Mesh mesh, struct Vertex a,
 	face.vertex_index[2]=List_get_or_make(mesh->vertecies,&c);
 	face.vertex_index[3]=List_get_or_make(mesh->vertecies,&d);
 
-	List_append(mesh->faces, &face);
+	List_push(mesh->faces, &face);
 
 }
 
@@ -153,6 +155,225 @@ bool Mesh_from_volume(Mesh mesh, Volume volume)
 	return false;
 }
 
+static Vector Vector_sub(Vector a, Vector b)
+{
+	return (Vector){a.x-b.x, a.y-b.y, a.z-b.z};
+}
+
+static Vector Vector_cross(Vector a, Vector b)
+{
+	return (Vector){a.y*b.z - b.y*a.z, a.z*b.x - b.z*a.x, a.x*b.y - b.x*a.y};
+}
+static Vector Vector_scale(Vector a, float s)
+{
+	return (Vector){a.x*s, a.y*s, a.z*s};
+}
+
+static float Vector_dot(Vector a, Vector b)
+{
+	return a.x*b.x+a.y*b.y+a.z*b.z;
+}
+static float Vector_length(Vector v)
+{
+	return sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
+}
+
+static float calulate_z(float x, float y, Trig t)
+{
+	Vector gs = {x,y,0};
+	Vector s = t[0];
+
+	Vector a = Vector_sub(t[1], s);
+	Vector b = Vector_sub(t[2], s);
+	Vector n = Vector_cross(a,b);
+
+	// colinear
+	if(fabsf(n.z)<0.001f)
+		// maybe check for identicallity
+		return NAN;
+
+	 return (Vector_dot(s, n)-Vector_dot(gs,n))/n.z;
+}
+
+float Vector_angle(Vector a, Vector b)
+{
+	return (Vector_dot(a,b))/Vector_length(a)/Vector_length(b);
+}
+
+static bool inside_trig(Vector p, Trig t)
+{
+	float a = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(t[1], p)));
+	float b = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(t[1], t[2])));
+
+	if(b/a>1 || b/a <0)
+		return false;
+
+
+	a = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(t[0], p)));
+	b = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(t[0], t[1])));
+
+	if(b/a>1 || b/a <0)
+		return false;
+
+	a = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(t[2], p));
+	b = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(t[2], t[0]));
+
+	if(b/a>1 || b/a <0)
+		return false;
+
+	return true;
+}
+
+bool cmp(void *a, void *b) { return *(int*)a<*(int*)b;}
+void print(void *a) { printf("%llu, ", *(size_t*)a);}
+
+static float Mesh_internal_intersect(Trig t, Vector pos, Vector norm_direction)
+{
+	Vector a = Vector_sub(t[1], t[0]);
+	Vector b = Vector_sub(t[2], t[0]);
+
+	Vector n = Vector_cross(a,b);
+
+	float direction_dot = Vector_dot(norm_direction, n);
+	if(fabsf(direction_dot)<0.001f)
+		return NAN;
+
+	return (Vector_dot(Vector_sub(t[0], pos), n))/direction_dot;
+}
+
+List Mesh_intersects(Vector pos, Vector direction, List trigs)
+{
+	List intersections = List_create(sizeof(float));
+	Vector direction_n = Vector_scale(direction, Vector_length(direction));
+
+	for(Trig *start = List_start(trigs),
+			 *end   = List_end(trigs); start!=end; end++)
+	{
+		float a = Mesh_internal_intersect(*start, pos, direction_n);
+		if(a!=NAN)
+			List_push(intersections, &a);
+	}
+	return intersections;
+}
+
+
+struct Dimensions Mesh_dimensions(List trigs)
+{
+	union coord min={{FLT_MAX,FLT_MAX,FLT_MAX}};
+	union coord max={{-FLT_MAX,-FLT_MAX,-FLT_MAX}};
+
+	for(size_t i=0; i < List_size(trigs); i++)
+	{
+		for(size_t p=0; p<3; p++){
+			union coord v = {(*(Trig*)List_get(trigs, i))[p]};
+			for(size_t d=0; d<3; d++)
+			{
+				if(v.a[d]<min.a[d])
+					min.a[d]=v.a[d];
+
+				if(v.a[d]>max.a[d])
+					max.a[d]=v.a[d];
+			}
+		}
+	}
+}
+
+float Coord_remap(float a, struct Dimensions size, size_t d)
+{
+	return (a-size.min.a[d])/(size.max.a[d]-size.min.a[d]);
+}
+
+List Mesh_to_chunks(List trigs, size_t res[3])
+{
+
+	struct Dimensions mesh_dimensions = Mesh_dimensions(trigs),
+					  tmp;
+
+	List *chunks = malloc(sizeof(List)*res[0]*res[1]*res[2]);
+
+	for(size_t i=0; i<res[0]*res[1]*res[2]; i++)
+		chunks[i]=List_create(sizeof(Trig));
+
+	for(size_t i=0; i<List_size(trigs); i++)
+	{
+		// get Triangle dimensions (X and Y)
+		tmp = mesh_dimensions;
+
+		for(size_t p=0; p<3; p++){
+			union coord v = {(*(Trig*)List_get(trigs, i))[p]};
+
+			for(size_t d=0; d<3; d++)
+			{
+				if(v.a[d]<tmp.min.a[d])
+					tmp.min.a[d]=v.a[d];
+
+				if(v.a[d]>tmp.max.a[d])
+					tmp.max.a[d]=v.a[d];
+			}
+		}
+		// Calculate chunk span
+		size_t start[3];
+		size_t end[3];
+		for(size_t d=0; d<3; d++)
+		{
+			start[d] = Coord_remap(tmp.min.a[d], tmp, d)*res[d];
+			end[d] = Coord_remap(tmp.max.a[d], tmp, d)*res[d];
+		}
+
+		// write triangle to chunks
+		for(size_t z=start[2]; z<end[2]; z++)
+		{
+			for(size_t y=start[1]; y<end[1]; y++)
+			{
+				for(size_t x=start[0]; x<end[0]; x++)
+				{
+					List c = chunks[z*res[1]+y*res[0]+x];
+					List_push(c, List_get(trigs, i));
+				}
+			}
+		}
+	}
+	return chunks;
+}
+
+void Chunks_free(List chunks)
+{
+	List_forward(chunks, free);
+}
+
+bool Mesh_to_slices(List trigs, size_t res[3])
+{
+	List chunks = Mesh_to_chunks(trigs, (size_t[3]){10, 10, 1});
+	struct Dimensions size = Mesh_dimensions(trigs);
+
+	char path[] = "Sec_.png";
+
+	for(size_t slice=0; slice<res[2]; slice++)
+	{
+		Image img = Image_create();
+		Image_from_color(img, res[0], res[1], 0);
+
+		for(float x=size.min.a[0]; x<size.max.a[0]; x+=size.max.a[0]/res[0])
+		{
+			size_t xx = Coord_remap(x, size, 0)*res[0];
+
+			List hits = Mesh_intersects((Vector){x,size.min.v.y+(float)slice*size.max.v.y/res[2],0}, (Vector){0,0,1}, List_get(chunks, slice*10+xx));
+			for(size_t i=0; i<List_size(hits); i++)
+			{
+				size_t zz = Coord_remap(*(float*)List_get(hits, i), size, 1)*res[1];
+				*Image_get(img, xx, zz) = 255;
+			}
+			List_free(hits);
+		}
+		path[3]='a'+slice;
+		Image_save(img, path);
+		Image_free(img);
+	}
+
+	free(chunks);
+
+}
+
 
 // Wavefront Obj
 // ASCII
@@ -230,7 +451,7 @@ List Mesh_read_stl(const char *path)
 	for(int i=0; i<count; i++)
 	{
 		fread(&data, sizeof(data), 1, f);
-		List_append(l, (Trig*)&data.vertecies);
+		List_push(l, (Trig*)&data.vertecies);
 	}
 
 	fclose(f);

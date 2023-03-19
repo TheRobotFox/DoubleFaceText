@@ -21,3 +21,6 @@ Font.font.h: Font.bmp
 
 dft.o: Font.font.h
 
+test: dft
+	./dft py.stl FROM MESH TO NBT AS nbt.nbt
+	./dft nbt.nbt FROM NBT TO MESH AS out.obj

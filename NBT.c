@@ -84,7 +84,7 @@ bool NBT_internal_Array_load(List *arr, size_t element_size, gzFile f)
 
 	// read characters into string buffer
 	for(size_t i=0; i<length; i++)
-		gzread(f, List_append(*arr, NULL), element_size);
+		gzread(f, List_push(*arr, NULL), element_size);
 
 	return 0;
 }
@@ -299,7 +299,7 @@ bool NBT_internal_Tag_body_load(struct NBT_Payload *data, enum NBT_TYPE type, gz
 
 					INDENT(1)
 					for(size_t i=0; i<length; i++)
-						NBT_internal_Tag_body_load(List_append(list->data, NULL), list->type, f);
+						NBT_internal_Tag_body_load(List_push(list->data, NULL), list->type, f);
 
 					INDENT(-1)
 				}else{
@@ -314,7 +314,7 @@ bool NBT_internal_Tag_body_load(struct NBT_Payload *data, enum NBT_TYPE type, gz
 				struct NBT_Tag element;
 				while((NBT_Tag_load(&element, f) != NBT_END))
 				{
-					List_append(data->array, &element);
+					List_push(data->array, &element);
 				}
 				INDENT(-1)
 
@@ -558,7 +558,7 @@ void NBT_list_set(NBT_Data nbt, size_t index, NBT_Data v)
 {
 	if(nbt && nbt->list.data){
 		if(index>=List_size(nbt->list.data))
-			List_grow(nbt->list.data, index+1);
+			List_resize(nbt->list.data, index+1);
 		memcpy(List_get(nbt->list.data, index), v, NBT_internal_sizeof(nbt->list.type));
 	}
 }
@@ -605,7 +605,7 @@ void NBT_compound_set_name(NBT_Data nbt, char *name, NBT v)
 		if(e)
 			*e=*v;
 		else
-			e = List_append(nbt->array, v);
+			e = List_push(nbt->array, v);
 	}
 }
 
@@ -616,7 +616,7 @@ void NBT_compound_set_index(NBT_Data nbt, size_t index, NBT v)
 			nbt->array=List_create(sizeof(struct NBT_Tag));
 
 		if(index>=List_size(nbt->array))
-			List_grow(nbt->array, index+1);
+			List_resize(nbt->array, index+1);
 
 		*(NBT)List_get(nbt->array, index)=*v;
 	}

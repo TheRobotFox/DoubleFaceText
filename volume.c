@@ -136,8 +136,6 @@ int min(int a, int b)
 }
 bool Volume_from_NBT(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_transparrent)
 {
-	bool ret = true;
-
 	NBT_Data size =   NBT_data(NBT_compound_get_name(NBT_data(nbt), "size"));
 	NBT_Data blocks = NBT_data(NBT_compound_get_name(NBT_data(nbt), "blocks"));
 	NBT_Data palette = NBT_data(NBT_compound_get_name(NBT_data(nbt), "palette"));
@@ -264,7 +262,6 @@ bool Volume_from_NBT(Volume vol, NBT nbt, struct Blocks_transparrent *blocks_tra
 
 		*Volume_get(vol, x, y, z)=mask[palette_index];
 	}
-	ret = false;
 	free(mask);
 	SUCCESS("Volume generation!")
 	return false;
@@ -420,96 +417,76 @@ bool Volume_to_shadow(Volume vol, Image *front, Image *side, Image *top)
 	return false;
 }
 
+bool cmp(void *ptr_a, void *ptr_b)
+{
+	float *a=ptr_a,
+		  *b=ptr_b;
+	return *a<*b;
+}
 
 bool Volume_from_mesh(Volume vol, List trigs, size_t res[3])
 {
-	/* Volume_allocate(vol, res[0], res[1], res[2]); */
+	Volume_allocate(vol, res[0], res[1], res[2]);
 
-	/* INFO("Voxel resolution: %dx%dx%d", vol->x, vol->y, vol->z) */
+	INFO("Voxel resolution: %dx%dx%d", vol->x, vol->y, vol->z)
 
-	/* /1* INFO("Mesh Dimensions %f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f", *1/ */
-	/* /1* 						mesh_dimentions.min.v.x, mesh_dimentions.max.v.x, *1/ */
-	/* /1* 						mesh_dimentions.min.v.y, mesh_dimentions.max.v.y, *1/ */
-	/* /1* 						mesh_dimentions.min.v.z, mesh_dimentions.max.v.z) *1/ */
+	struct Dimensions mesh_dimensions = Mesh_dimensions(trigs);
 
-	/* List chunks = Mesh_to_chunks(trigs, (size_t[3]){res[0], res[1], 1}); */
+	INFO("Mesh Dimensions %f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f",
+							mesh_dimensions.min.v.x, mesh_dimensions.max.v.x,
+							mesh_dimensions.min.v.y, mesh_dimensions.max.v.y,
+							mesh_dimensions.min.v.z, mesh_dimensions.max.v.z)
 
-	/* INFO("Calculate Collisions") */
+	INFO("Calculate Collisions")
 
+	size_t collisions_total = 0;
+	for(size_t y=0; y<res[1]; y++)
+	{
+		for(size_t x=0; x<res[0]; x++)
+		{
+			// Calculate space coordinates
+			float fx = (float)(x+.5)/res[0]*(mesh_dimensions.max.v.x-mesh_dimensions.min.v.x)+mesh_dimensions.min.v.x;
+			float fy = (float)(y+.5)/res[1]*(mesh_dimensions.max.v.y-mesh_dimensions.min.v.y)+mesh_dimensions.min.v.y;
 
-	/* size_t collisions_total = 0; */
-	/* for(size_t y=0; y<res[1]; y++) */
-	/* { */
-	/* 	// DEBUG */
-	/* 	Image i = Image_create(); */
-/* #define IMG_SCALE 10 */
-	/* 	Image_from_color(i, res[0]*IMG_SCALE, res[2]*IMG_SCALE, 0); */
+			List intersections = Mesh_intersects(trigs, (Vector){fx,fy, 0}, (Vector){0,0,1});
+			if(List_size(intersections)%2)
+				INFO("Non Manifold Object", x, y)
 
-	/* 	for(size_t x=0; x<res[0]; x++) */
-	/* 	{ */
-	/* 		// Calculate space coordinates */
-	/* 		float fx = (float)(x+.5)/res[0]*(max.v.x-min.v.x)+min.v.x; */
-	/* 		float fy = (float)(y+.5)/res[1]*(max.v.y-min.v.y)+min.v.y; */
+			size_t intersections_count = List_size(intersections);
 
-	/* 		List chunk = chunks[y*res[0]+x]; */
-	/* 		List collisions = List_create(sizeof(size_t)); */
+			if(intersections_count){
+				collisions_total+=intersections_count;
 
-	/* 		for(size_t *t=List_start(chunk); t<(size_t*)List_end(chunk); t++) */
-	/* 		{ */
-	/* 			// Calculate collision */
-	/* 			float fz = calulate_z(fx,fy, mesh[*t]); */
-	/* 			if(!isnan(fz)){ */
-	/* 				if(inside_trig((Vector){fx,fy,fz}, mesh[*t])){ */
+				List_sort(intersections, cmp);
 
-	/* 					*Image_get(i, x*IMG_SCALE, (fz-min.v.z)/(max.v.z-min.v.z)*res[2]*IMG_SCALE) = 255; */
-
-	/* 					// rescale z */
-	/* 					size_t z = (fz-min.v.z)/(max.v.z-min.v.z)*(res[2]); */
-	/* 					List_append(collisions, &z); */
-	/* 					collisions_total++; */
-	/* 				} */
-	/* 			} */
-	/* 		} */
+				// write collisions
+				size_t coll_index=0;
+				while(coll_index<intersections_count-1)
+				{
+					size_t start =Coord_remap(List_GET_REF(float, intersections,coll_index++), mesh_dimensions, 2)*res[2],
+						  end = Coord_remap(List_GET_REF(float, intersections,coll_index++), mesh_dimensions, 2)*res[2];
 
 
-	/* 		// sort collisions */
-	/* 		List_sort(collisions, cmp); */
+					if(start==end){
+						coll_index--;
+						continue;
+					}
 
-	/* 		if(List_size(collisions)%2){ */
-	/* 			INFO("Inaccurate Detection of collisions at %d %d", x, y) */
-	/* 			List_foreach(collisions, print); */
-	/* 		} */
+					if(end>res[2]) end=res[2];
 
-	/* 		// write collisions */
-	/* 		int coll_index=0; */
-	/* 		while(coll_index<(int)List_size(collisions)-1) */
-	/* 		{ */
-	/* 			size_t *start = List_get(collisions,coll_index++), */
-	/* 				   *end = List_get(collisions,coll_index++); */
-	/* 			if(*start==*end){ */
-	/* 				coll_index--; */
-	/* 				continue; */
-	/* 			} */
+					for(; start<end; start++)
+						*Volume_get(vol, x, y, start) = 1;
+				}
 
-	/* 			for(size_t z=*start; z<*end; z++) */
-	/* 				*Volume_get(vol, x, y, z) = 1; */
-	/* 		} */
+			}
+			List_free(intersections);
+		}
+	}
 
-	/* 		List_free(collisions); */
-	/* 	} */
-	/* 	path[3]='a'+y; */
-	/* 	Image_save(i, path); */
-	/* 	Image_free(i); */
-	/* } */
+	INFO("Collision count: %llu", collisions_total)
 
-	/* INFO("Collision count: %llu", collisions_total) */
-
-	/* for(size_t i=0; i<res[0]*res[1]; i++) */
-	/* 	List_free(chunks[i]); */
-	/* free(chunks); */
-
-	/* SUCCESS("Voxelisation done!") */
-	/* return false; */
+	SUCCESS("Voxelisation done!")
+	return false;
 }
 
 void Volume_free(Volume v)

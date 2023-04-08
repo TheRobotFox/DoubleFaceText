@@ -1,11 +1,14 @@
 #pragma once
 
+
+//TODO: Smooth Slices
+//TODO: Chunking
+//TODO: fix voxelization
+//TODO: Speedup Meshing (still) -> by obviously redoing at_or_make
+
 typedef struct Mesh* Mesh;
 
-struct Vertex
-{
-	float x,y,z;
-};
+#include "mesh_internal.h"
 
 typedef	struct Vertex Trig[3];
 
@@ -38,3 +41,6 @@ List Mesh_to_chunks(List trigs, size_t res[3]);
 
 float Coord_remap(float a, struct Dimensions size, size_t d);
 bool Mesh_to_slices(List trigs, size_t res[3]);
+List Mesh_intersects(List trigs, Vector pos, Vector direction);
+float Coord_remap(float a, struct Dimensions size, size_t d);
+struct Dimensions Mesh_dimensions(List trigs);

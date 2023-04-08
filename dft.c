@@ -282,8 +282,8 @@ bool MESH_IN(union CC_Data *data, void *_path)
 bool TRIGS_VOLUME(union CC_Data *data, void *_path)
 {
 	Volume vol = Volume_create();
-	//Volume_from_mesh(vol, List_start(data->trigs), List_size(data->trigs), (size_t[3]){30,30,30});
-	Mesh_to_slices(data->trigs, (size_t[3]){200, 200, 10});
+	Volume_from_mesh(vol, data->trigs, (size_t[3]){100,100,100});
+	//Mesh_to_slices(data->trigs, (size_t[3]){400, 400, 20});
 	List_free(data->trigs);
 	data->vol=vol;
 	return false;

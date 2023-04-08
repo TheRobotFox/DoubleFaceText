@@ -9,6 +9,8 @@
 #include <string.h>
 #include <errno.h>
 
+IMPLEMENT_LIST(Vertex)
+
 struct Face
 {
 	size_t vertex_index[4];
@@ -22,22 +24,22 @@ struct Mesh
 
 Mesh Mesh_create()
 {
-	Mesh mesh = malloc(sizeof(struct Mesh));
+	Mesh mesh = (Mesh)malloc(sizeof(struct Mesh));
 	mesh->vertecies=List_create(sizeof(struct Vertex));
 	mesh->faces=List_create(sizeof(struct Face));
 
 	return mesh;
 }
 
-static bool _comp_vertex(void *a, void *b)
+static bool _comp_vertex(Vertex *a, Vertex *b)
 {
-	return !memcmp(a,b,sizeof(struct Vertex));
+	return !memcmp(a,b,sizeof(Vertex));
 }
-size_t List_get_or_make(List l, void* object)
+size_t List_at_or_make(List l, void* object)
 {
-	uint8_t *found = List_find(l,_comp_vertex, object);
+	Vertex *found = LIST(Vertex, find)(l,_comp_vertex, object);
 	if(found)
-		return (found-(uint8_t*)List_start(l))/sizeof(struct Vertex);
+		return (found-(Vertex*)List_start(l));
 	List_push(l,object);
 	return List_size(l)-1;
 }
@@ -49,10 +51,10 @@ void Mesh_face_add(Mesh mesh, struct Vertex a,
 				  )
 {
 	struct Face face;
-	face.vertex_index[0]=List_get_or_make(mesh->vertecies,&a);
-	face.vertex_index[1]=List_get_or_make(mesh->vertecies,&b);
-	face.vertex_index[2]=List_get_or_make(mesh->vertecies,&c);
-	face.vertex_index[3]=List_get_or_make(mesh->vertecies,&d);
+	face.vertex_index[0]=List_at_or_make(mesh->vertecies,&a);
+	face.vertex_index[1]=List_at_or_make(mesh->vertecies,&b);
+	face.vertex_index[2]=List_at_or_make(mesh->vertecies,&c);
+	face.vertex_index[3]=List_at_or_make(mesh->vertecies,&d);
 
 	List_push(mesh->faces, &face);
 
@@ -155,6 +157,11 @@ bool Mesh_from_volume(Mesh mesh, Volume volume)
 	return false;
 }
 
+static Vector Vector_add(Vector a, Vector b)
+{
+	return (Vector){a.x+b.x, a.y+b.y, a.z+b.z};
+}
+
 static Vector Vector_sub(Vector a, Vector b)
 {
 	return (Vector){a.x-b.x, a.y-b.y, a.z-b.z};
@@ -178,21 +185,26 @@ static float Vector_length(Vector v)
 	return sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
 }
 
-static float calulate_z(float x, float y, Trig t)
+/* static float calulate_z(float x, float y, Trig t) */
+/* { */
+/* 	Vector gs = {x,y,0}; */
+/* 	Vector s = t[0]; */
+
+/* 	Vector a = Vector_sub(t[1], s); */
+/* 	Vector b = Vector_sub(t[2], s); */
+/* 	Vector n = Vector_cross(a,b); */
+
+/* 	// colinear */
+/* 	if(fabsf(n.z)<0.001f) */
+/* 		// maybe check for identicallity */
+/* 		return NAN; */
+
+/* 	 return (Vector_dot(s, n)-Vector_dot(gs,n))/n.z; */
+/* } */
+
+bool Vector_equals(Vector a, Vector b)
 {
-	Vector gs = {x,y,0};
-	Vector s = t[0];
-
-	Vector a = Vector_sub(t[1], s);
-	Vector b = Vector_sub(t[2], s);
-	Vector n = Vector_cross(a,b);
-
-	// colinear
-	if(fabsf(n.z)<0.001f)
-		// maybe check for identicallity
-		return NAN;
-
-	 return (Vector_dot(s, n)-Vector_dot(gs,n))/n.z;
+	return a.x == b.x && a.y == b.y && a.z==b.z;
 }
 
 float Vector_angle(Vector a, Vector b)
@@ -200,34 +212,21 @@ float Vector_angle(Vector a, Vector b)
 	return (Vector_dot(a,b))/Vector_length(a)/Vector_length(b);
 }
 
+// from blackpawn
+
+static bool Line_same_side(Vector a, Vector b, Vector p, Vector r)
+{
+	Vector line = Vector_sub(a,b);
+	return Vector_dot(Vector_cross(line, Vector_sub(p,a)),Vector_cross(line, Vector_sub(r, a)))>=0;
+}
 static bool inside_trig(Vector p, Trig t)
 {
-	float a = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(t[1], p)));
-	float b = asinf(Vector_angle(Vector_sub(t[1],t[0]), Vector_sub(t[1], t[2])));
-
-	if(b/a>1 || b/a <0)
-		return false;
-
-
-	a = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(t[0], p)));
-	b = asinf(Vector_angle(Vector_sub(t[0],t[2]), Vector_sub(t[0], t[1])));
-
-	if(b/a>1 || b/a <0)
-		return false;
-
-	a = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(t[2], p));
-	b = Vector_angle(Vector_sub(t[2],t[1]), Vector_sub(t[2], t[0]));
-
-	if(b/a>1 || b/a <0)
-		return false;
-
-	return true;
+	return Line_same_side(t[0], t[1], p, t[2]) &&
+		   Line_same_side(t[1], t[2], p, t[0]) &&
+		   Line_same_side(t[0], t[2], p, t[1]);
 }
 
-bool cmp(void *a, void *b) { return *(int*)a<*(int*)b;}
-void print(void *a) { printf("%llu, ", *(size_t*)a);}
-
-static float Mesh_internal_intersect(Trig t, Vector pos, Vector norm_direction)
+static float Trig_intersect(Trig t, Vector pos, Vector norm_direction)
 {
 	Vector a = Vector_sub(t[1], t[0]);
 	Vector b = Vector_sub(t[2], t[0]);
@@ -238,19 +237,22 @@ static float Mesh_internal_intersect(Trig t, Vector pos, Vector norm_direction)
 	if(fabsf(direction_dot)<0.001f)
 		return NAN;
 
-	return (Vector_dot(Vector_sub(t[0], pos), n))/direction_dot;
+	float dist = (Vector_dot(Vector_sub(t[0], pos), n))/direction_dot;
+	Vector plane_hit = Vector_add(pos, Vector_scale(norm_direction, dist));
+
+	return inside_trig(plane_hit, t) ? dist : NAN;
 }
 
-List Mesh_intersects(Vector pos, Vector direction, List trigs)
+List Mesh_intersects(List trigs, Vector pos, Vector direction)
 {
 	List intersections = List_create(sizeof(float));
 	Vector direction_n = Vector_scale(direction, Vector_length(direction));
 
 	for(Trig *start = List_start(trigs),
-			 *end   = List_end(trigs); start!=end; end++)
+			 *end   = List_end(trigs); start!=end; start++)
 	{
-		float a = Mesh_internal_intersect(*start, pos, direction_n);
-		if(a!=NAN)
+		float a = Trig_intersect(*start, pos, direction_n);
+		if(!isnan(a))
 			List_push(intersections, &a);
 	}
 	return intersections;
@@ -262,10 +264,11 @@ struct Dimensions Mesh_dimensions(List trigs)
 	union coord min={{FLT_MAX,FLT_MAX,FLT_MAX}};
 	union coord max={{-FLT_MAX,-FLT_MAX,-FLT_MAX}};
 
-	for(size_t i=0; i < List_size(trigs); i++)
+	for(Trig *start=List_start(trigs),
+			 *end = List_end(trigs); start!=end; start++)
 	{
 		for(size_t p=0; p<3; p++){
-			union coord v = {(*(Trig*)List_get(trigs, i))[p]};
+			union coord v = {(*start)[p]};
 			for(size_t d=0; d<3; d++)
 			{
 				if(v.a[d]<min.a[d])
@@ -276,11 +279,24 @@ struct Dimensions Mesh_dimensions(List trigs)
 			}
 		}
 	}
+	return (struct Dimensions){min, max};
 }
 
 float Coord_remap(float a, struct Dimensions size, size_t d)
 {
 	return (a-size.min.a[d])/(size.max.a[d]-size.min.a[d]);
+}
+
+void print_vex(void *a)
+{
+	Trig *t=a;
+	PRINT("[%f,%f,%f]", *t[0], *t[1], *t[2])
+}
+void print_length(List a)
+{
+	INFO("Chunk has %d Items", List_size(a));
+	//List_foreach(a, print_vex);
+	puts("");
 }
 
 List Mesh_to_chunks(List trigs, size_t res[3])
@@ -289,18 +305,21 @@ List Mesh_to_chunks(List trigs, size_t res[3])
 	struct Dimensions mesh_dimensions = Mesh_dimensions(trigs),
 					  tmp;
 
-	List *chunks = malloc(sizeof(List)*res[0]*res[1]*res[2]);
-
+	List chunks = List_create(sizeof(List));
+	List_resize(chunks, res[0]*res[1]*res[2]);
 	for(size_t i=0; i<res[0]*res[1]*res[2]; i++)
-		chunks[i]=List_create(sizeof(Trig));
+		List_GET_REF(List, chunks, i)=List_create(sizeof(Trig));
 
-	for(size_t i=0; i<List_size(trigs); i++)
+	for(Trig *trig_start=List_start(trigs),
+			 *trig_end = List_end(trigs);
+			trig_start!=trig_end; trig_start++)
 	{
 		// get Triangle dimensions (X and Y)
-		tmp = mesh_dimensions;
+		tmp.min = mesh_dimensions.max;
+		tmp.max = mesh_dimensions.min;
 
 		for(size_t p=0; p<3; p++){
-			union coord v = {(*(Trig*)List_get(trigs, i))[p]};
+			union coord v = {(*trig_start)[p]};
 
 			for(size_t d=0; d<3; d++)
 			{
@@ -316,52 +335,69 @@ List Mesh_to_chunks(List trigs, size_t res[3])
 		size_t end[3];
 		for(size_t d=0; d<3; d++)
 		{
-			start[d] = Coord_remap(tmp.min.a[d], tmp, d)*res[d];
-			end[d] = Coord_remap(tmp.max.a[d], tmp, d)*res[d];
+			start[d] = (Coord_remap(tmp.min.a[d], mesh_dimensions, d)-.1)*(res[d]-1);
+			end[d] = (Coord_remap(tmp.max.a[d], mesh_dimensions, d)+.1)*(res[d]-1);
+			/* printf("%d: %d %d\n", d, start[d], end[d]); */
 		}
 
 		// write triangle to chunks
-		for(size_t z=start[2]; z<end[2]; z++)
+		for(size_t z=start[2]; z<=end[2]; z++)
 		{
-			for(size_t y=start[1]; y<end[1]; y++)
+			for(size_t y=start[1]; y<=end[1]; y++)
 			{
-				for(size_t x=start[0]; x<end[0]; x++)
+				for(size_t x=start[0]; x<=end[0]; x++)
 				{
-					List c = chunks[z*res[1]+y*res[0]+x];
-					List_push(c, List_get(trigs, i));
+					List *c = List_at(chunks, z*res[1]*res[0]+y*res[0]+x);
+					List_push(*c, trig_start);
 				}
 			}
 		}
 	}
+	LIST(List, forward)(chunks, print_length);
 	return chunks;
 }
 
 void Chunks_free(List chunks)
 {
-	List_forward(chunks, free);
+	LIST(List, forward)(chunks, List_free);
+	List_free(chunks);
 }
+
 
 bool Mesh_to_slices(List trigs, size_t res[3])
 {
-	List chunks = Mesh_to_chunks(trigs, (size_t[3]){10, 10, 1});
+	//INFO("Creating Chunks")
+	//List chunks = Mesh_to_chunks(trigs, (size_t[3]){10, 10, 1});
 	struct Dimensions size = Mesh_dimensions(trigs);
+	INFO("Mesh Dimensions %f <= x <= %f\n%f <= y <= %f\n%f <= z <= %f",
+							size.min.v.x, size.max.v.x,
+							size.min.v.y, size.max.v.y,
+							size.min.v.z, size.max.v.z)
 
 	char path[] = "Sec_.png";
 
+	INFO("Drawing Slices")
 	for(size_t slice=0; slice<res[2]; slice++)
 	{
 		Image img = Image_create();
 		Image_from_color(img, res[0], res[1], 0);
 
-		for(float x=size.min.a[0]; x<size.max.a[0]; x+=size.max.a[0]/res[0])
+		for(float x=size.min.a[0]; x<size.max.a[0]; x+=(size.max.a[0]-size.min.a[0])/res[0])
 		{
-			size_t xx = Coord_remap(x, size, 0)*res[0];
+			float xx = Coord_remap(x, size, 0);
 
-			List hits = Mesh_intersects((Vector){x,size.min.v.y+(float)slice*size.max.v.y/res[2],0}, (Vector){0,0,1}, List_get(chunks, slice*10+xx));
+			Vector pos = {x,size.min.v.y+slice*(size.max.v.y-size.min.v.y)/(res[2]-1),0};
+			List hits = Mesh_intersects(trigs, pos, (Vector){0,0,1}); //List_GET_REF(List, chunks, (float)slice*10.0f/res[2]+xx*10));
 			for(size_t i=0; i<List_size(hits); i++)
 			{
-				size_t zz = Coord_remap(*(float*)List_get(hits, i), size, 1)*res[1];
-				*Image_get(img, xx, zz) = 255;
+				float norm_distance = Coord_remap(List_GET_REF(float, hits, i), size, 2);
+				if(norm_distance>=1.0f)
+					norm_distance=1.0f;
+				if(norm_distance<0)
+					norm_distance=0;
+
+				size_t zz = norm_distance*(res[1]-1);
+				*Image_get(img, xx*res[0], zz) = 255;
 			}
 			List_free(hits);
 		}
@@ -370,10 +406,9 @@ bool Mesh_to_slices(List trigs, size_t res[3])
 		Image_free(img);
 	}
 
-	free(chunks);
-
+	//Chunks_free(chunks);
+	return true;
 }
-
 
 // Wavefront Obj
 // ASCII
@@ -442,7 +477,7 @@ List Mesh_read_stl(const char *path)
 
 	fseek(f, 80, SEEK_SET);
 	unsigned int count;
-	fread(&count, sizeof(count), 1, f);
+	if(fread(&count, sizeof(count), 1, f)!=1) ERROR("fread failed!")
 
 	List l = List_create(sizeof(Trig));
 	List_reserve(l, count);
@@ -450,7 +485,7 @@ List Mesh_read_stl(const char *path)
 	struct Triangle_data data;
 	for(int i=0; i<count; i++)
 	{
-		fread(&data, sizeof(data), 1, f);
+	if(fread(&data, sizeof(data), 1, f)!=1) ERROR("fread failed!")
 		List_push(l, (Trig*)&data.vertecies);
 	}
 
@@ -480,14 +515,14 @@ bool Mesh_save_stl(Mesh mesh, const char *path)
 		for(struct Face *f = List_start(mesh->faces),
 				*e = List_end(mesh->faces); f != e; f++)
 		{
-			trig1.vertecies[0]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[0]);
-			trig1.vertecies[1]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[1]);
-			trig1.vertecies[2]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[2]);
+			trig1.vertecies[0]=List_GET_REF(struct Vertex, mesh->vertecies,f->vertex_index[0]);
+			trig1.vertecies[1]=List_GET_REF(struct Vertex, mesh->vertecies,f->vertex_index[1]);
+			trig1.vertecies[2]=List_GET_REF(struct Vertex, mesh->vertecies,f->vertex_index[2]);
 			fwrite(&trig1,50, 1, file);
 
-			trig2.vertecies[0]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[2]);
-			trig2.vertecies[1]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[3]);
-			trig2.vertecies[2]=*(struct Vertex*)List_get(mesh->vertecies,f->vertex_index[0]);
+			trig2.vertecies[0]=List_GET_REF(struct Vertex, mesh->vertecies,f->vertex_index[2]);
+			trig2.vertecies[1]=List_GET_REF(struct Vertex, mesh->vertecies,f->vertex_index[3]);
+			trig2.vertecies[2]=List_GET_REF(struct Vertex, mesh->vertecies,f->vertex_index[0]);
 			fwrite(&trig2,50, 1, file);
 		}
 

@@ -550,7 +550,7 @@ void NBT_list_type_set(NBT_Data nbt, enum NBT_TYPE v)
 NBT_Data NBT_list_get(NBT_Data nbt, size_t index)
 {
 	if(nbt && nbt->list.data)
-		return List_get(nbt->list.data, index);
+		return List_at(nbt->list.data, index);
 	return NULL;
 }
 
@@ -559,7 +559,7 @@ void NBT_list_set(NBT_Data nbt, size_t index, NBT_Data v)
 	if(nbt && nbt->list.data){
 		if(index>=List_size(nbt->list.data))
 			List_resize(nbt->list.data, index+1);
-		memcpy(List_get(nbt->list.data, index), v, NBT_internal_sizeof(nbt->list.type));
+		memcpy(List_at(nbt->list.data, index), v, NBT_internal_sizeof(nbt->list.type));
 	}
 }
 
@@ -585,7 +585,7 @@ NBT NBT_compound_get_name(NBT_Data nbt, char *name)
 
 NBT NBT_compound_get_index(NBT_Data nbt, size_t index)
 {
-	return List_get(nbt->array, index);
+	return List_at(nbt->array, index);
 }
 
 void NBT_compound_set_name(NBT_Data nbt, char *name, NBT v)
@@ -618,7 +618,7 @@ void NBT_compound_set_index(NBT_Data nbt, size_t index, NBT v)
 		if(index>=List_size(nbt->array))
 			List_resize(nbt->array, index+1);
 
-		*(NBT)List_get(nbt->array, index)=*v;
+		List_GET_REF(struct NBT_Tag, nbt->array, index)=*v;
 	}
 }
 

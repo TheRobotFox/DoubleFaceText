@@ -1,9 +1,9 @@
 [submodule "zlib"]
 	path = zlib
 	url = https://github.com/madler/zlib
-[submodule "info"]
-	path = info
-	url = https://github.com/NoHamster/info
 [submodule "NoFont"]
 	path = NoFont
-	url = https://github.com/NoHamster/NoFont
+	url = git@github.com:TheRobotFox/NoFont
+[submodule "info"]
+	path = info
+	url = git@github.com:TheRobotFox/info
